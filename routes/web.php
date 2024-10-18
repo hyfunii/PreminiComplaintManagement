@@ -18,6 +18,10 @@ Route::get('/', function () {
     return view('admin.responses');
 });
 
+Route::get('comp', function () {
+    return view('admin.complaints');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
