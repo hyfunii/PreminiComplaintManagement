@@ -14,13 +14,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.responses');
-});
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ResponseController;
 
-Route::get('comp', function () {
-    return view('admin.complaints');
-});
+Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
+Route::get('/', [ComplaintController::class, 'index']);
+Route::get('/responses', [ResponseController::class, 'index'])->name('response.index');
+Route::get('/response/{id}/detail', [ResponseController::class, 'detail'])->name('response.detail');
+
+// Route::get('/', function () {
+//     return view('admin.complaints');
+// });
+
+// Route::get('comp', function () {
+//     return view('admin.complaints');
+// });
+
+// Route::get('admin.dashboard', function () {
+//     return view('admin.complaints');
+// })->name('admin.dashboard');
+
+// Route::get('admin.complaint', function () {
+//     return view('admin.complaints');
+// })->name('admin.complaint');
+
+// Route::get('admin.response', function () {
+//     return view('admin.response');
+// })->name('admin.response');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
