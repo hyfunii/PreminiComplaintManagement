@@ -11,7 +11,7 @@ class ComplaintController extends Controller
 {
     public function index()
     {
-        $user = Auth::user(); // Mendapatkan user yang sedang login
+        $user = Auth::user();
 
         // Cek apakah user adalah admin (role_id = 1)
         if ($user->role_id == 1) {
