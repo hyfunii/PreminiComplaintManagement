@@ -17,11 +17,22 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ResponseController;
 
+// Route::get('/', [ComplaintController::class, 'home']);
+Route::get('/', [ComplaintController::class, 'dashboard'])->name('complaints.dashboard');
 Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
 Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
-Route::get('/', [ComplaintController::class, 'index']);
 Route::get('/responses', [ResponseController::class, 'index'])->name('response.index');
 Route::get('/response/{id}/detail', [ResponseController::class, 'detail'])->name('response.detail');
+Route::get('/responses/create/{id}', [ResponseController::class, 'create'])->name('responses.create');
+Route::post('/responses/store', [ResponseController::class, 'store'])->name('responses.store');
+Route::get('/responses/create/{complaint_id}', [ResponseController::class, 'create'])->name('responses.create');
+// Menampilkan daftar pengaduan user
+Route::get('/my-complaints', [ResponseController::class, 'ourComplaints'])->name('our_complaints');
+
+// Menampilkan detail dan respon pengaduan user
+Route::get('/my-complaints/{id}', [ResponseController::class, 'ourResponse'])->name('our_response');
+
+
 
 // Route::get('/', function () {
 //     return view('admin.complaints');

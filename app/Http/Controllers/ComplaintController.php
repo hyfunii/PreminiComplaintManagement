@@ -5,32 +5,84 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Complaint;
 use App\Models\ComplaintCategory;
+use App\Models\Response;
 use Auth;
 
 class ComplaintController extends Controller
 {
-    public function index()
+    public function home()
     {
+        return view('user.home');
+    }
+
+    public function dashboard()
+    {
+        // Cek apakah user sudah login
+        if (!Auth::check()) {
+            // Jika tidak login, arahkan ke halaman login
+            return redirect()->route('login')->with('warning', 'Please login to access this page.');
+        }
+
         $user = Auth::user();
 
         // Cek apakah user adalah admin (role_id = 1)
         if ($user->role_id == 1) {
             // Jika admin, ambil semua data complaint dengan relasi user, kategori, dan status
-            $complaints = Complaint::with('user', 'category', 'status')->get();
+            // Tambahkan whereDoesntHave untuk filter keluhan yang belum direspons
+            $complaints = Complaint::with('user', 'category', 'status')
+                ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
+                ->get();
             return view('admin.complaints', compact('complaints'));
         }
         // Jika user biasa (role_id = 2)
         elseif ($user->role_id == 2) {
-            // Ambil hanya complaint milik user yang sedang login
+            // Ambil hanya complaint milik user yang sedang login dan belum direspons
             $categories = ComplaintCategory::all();
-            $complaints = Complaint::with('category', 'status')->where('user_id', $user->id)->get();
-            return view('user.complaints', compact('complaints','categories'));
-            // return view('user.home', compact('complaints'));
+            $complaints = Complaint::with('category', 'status')
+                ->where('user_id', $user->id)
+                ->whereDoesntHave('responses') // Hanya keluhan tanpa respons
+                ->get();
+            return view('user.our_complaint', compact('complaints', 'categories'));
         }
 
-        // Default fallback jika role tidak dikenali
-        abort(403, 'Unauthorized action.');
+        // Jika peran tidak dikenali, redirect ke halaman login
+        return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
+
+    public function index()
+    {
+        // Cek apakah user sudah login
+        if (!Auth::check()) {
+            // Jika tidak login, arahkan ke halaman login
+            return redirect()->route('login')->with('warning', 'Please login to access this page.');
+        }
+
+        $user = Auth::user();
+
+        // Cek apakah user adalah admin (role_id = 1)
+        if ($user->role_id == 1) {
+            // Jika admin, ambil semua data complaint dengan relasi user, kategori, dan status
+            // Tambahkan whereDoesntHave untuk filter keluhan yang belum direspons
+            $complaints = Complaint::with('user', 'category', 'status')
+                ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
+                ->get();
+            return view('admin.complaints', compact('complaints'));
+        }
+        // Jika user biasa (role_id = 2)
+        elseif ($user->role_id == 2) {
+            // Ambil hanya complaint milik user yang sedang login dan belum direspons
+            $categories = ComplaintCategory::all();
+            $complaints = Complaint::with('category', 'status')
+                ->where('user_id', $user->id)
+                ->whereDoesntHave('responses') // Hanya keluhan tanpa respons
+                ->get();
+            return view('user.complaints', compact('complaints', 'categories'));
+        }
+
+        // Jika peran tidak dikenali, redirect ke halaman login
+        return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
+    }
+
 
     public function store(Request $request)
     {

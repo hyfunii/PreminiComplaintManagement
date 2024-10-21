@@ -5,7 +5,6 @@
 <!-- Complaints Table -->
 <div class="container mx-auto py-8">
     <h2 class="text-2xl font-bold mb-6">Complaints Data</h2>
-    <div class="relative overflow-x-auto shadow-md rounded-lg">
         <table class="min-w-full bg-white border border-gray-200 shadow-md">
             <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                 <tr>
@@ -46,13 +45,12 @@
                         @endif
                     </td>
                     <td class="px-6 py-4">
-                        <a href="#" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
-                    </td>
+                        <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
+                    </td>                    
                 </tr>
                 @endforeach
             </tbody>
         </table>
-    </div>
 </div>
 
 <!-- Modal to display image -->
