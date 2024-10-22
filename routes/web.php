@@ -26,13 +26,8 @@ Route::get('/response/{id}/detail', [ResponseController::class, 'detail'])->name
 Route::get('/responses/create/{id}', [ResponseController::class, 'create'])->name('responses.create');
 Route::post('/responses/store', [ResponseController::class, 'store'])->name('responses.store');
 Route::get('/responses/create/{complaint_id}', [ResponseController::class, 'create'])->name('responses.create');
-// Menampilkan daftar pengaduan user
 Route::get('/my-complaints', [ResponseController::class, 'ourComplaints'])->name('our_complaints');
-
-// Menampilkan detail dan respon pengaduan user
 Route::get('/my-complaints/{id}', [ResponseController::class, 'ourResponse'])->name('our_response');
-
-
 
 // Route::get('/', function () {
 //     return view('admin.complaints');

@@ -10,7 +10,7 @@
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Responded by</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Response</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint Status</th> <!-- Kolom Status -->
+                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint Status</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Action</th>
                 </tr>
             </thead>
@@ -22,8 +22,8 @@
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->admin->name }}</td>
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->response_text }}</td>
 
-                        <!-- Menampilkan status dengan kondisi warna -->
-                        <td class="px-6 py-4 text-{{ $response->complaint->status->name == 'Not Processed' ? 'red' : ($response->complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
+                        <td
+                            class="px-6 py-4 text-{{ $response->complaint->status->name == 'Not Processed' ? 'red' : ($response->complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
                             {{ $response->complaint->status->name }}
                         </td>
 

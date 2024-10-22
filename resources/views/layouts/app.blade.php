@@ -35,17 +35,15 @@
                     <div class="flex items-center ms-3">
                         <div>
                             @if (Auth::check())
-                                <!-- Jika pengguna sedang login -->
                                 <button type="button"
                                     class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
                                     aria-expanded="false" data-dropdown-toggle="dropdown-user">
                                     <span class="sr-only">Open user menu</span>
                                     @if (Auth::check() && Auth::user()->role_id == 1)
-                                        <!-- Admin role -->
                                         <img class="w-8 h-8 rounded-full" src="{{ asset('image/profile.png') }}"
                                             alt="admin photo">
-                                    @else (Auth::check() && Auth::user()->role_id == 2)
-                                        <!-- User role -->
+                                    @else
+                                        (Auth::check() && Auth::user()->role_id == 2)
                                         <img class="w-8 h-8 rounded-full" src="{{ asset('image/user.png') }}"
                                             alt="user photo">
                                     @endif
@@ -62,19 +60,16 @@
                                         </p>
                                         <p class="text-sm font-medium text-gray-900 truncate dark:text-gray-300"
                                             role="none">
-                                            <!-- Menampilkan nama role -->
                                             {{ Auth::user()->role->name }}
                                         </p>
                                     </div>
                                     <ul class="py-1" role="none">
                                         <li>
-                                            @if(Auth::user()->role_id == 1)
-                                                <!-- Admin role -->
+                                            @if (Auth::user()->role_id == 1)
                                                 <a href="{{ route('complaints.index') }}"
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                     role="menuitem">Dashboard</a>
                                             @elseif(Auth::user()->role_id == 2)
-                                                <!-- User role -->
                                                 <a href="{{ route('our_complaints') }}"
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                     role="menuitem">your complaint</a>
@@ -94,7 +89,6 @@
                                     </ul>
                                 </div>
                             @else
-                                <!-- Jika pengguna belum login -->
                                 <a href="{{ route('login') }}"
                                     class="text-white bg-blue-500 hover:bg-blue-700 px-4 py-2 rounded-lg">Login</a>
                             @endif
@@ -105,7 +99,6 @@
         </div>
     </nav>
 
-    <!-- Sidebar hanya muncul jika pengguna adalah admin -->
     @if (Auth::check() && Auth::user()->role->name == 'admin')
         <aside id="logo-sidebar"
             class="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
@@ -126,7 +119,6 @@
                             <span class="ms-3">Dashboard</span>
                         </a>
                     </li>
-                    <!-- Tambahkan item sidebar lainnya di sini -->
                     <li>
                         <a href="{{ route('complaints.index') }}"
                             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

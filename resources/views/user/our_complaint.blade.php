@@ -7,11 +7,11 @@
         @if ($complaints->isEmpty())
             <p class="text-gray-600">You have not submitted any complaints yet.</p>
         @else
-            <!-- Complaints list in a scrollable box -->
             <div class="bg-white shadow-md rounded-lg p-4 max-h-80 overflow-y-auto">
                 <ul class="list-disc list-inside space-y-4">
                     @foreach ($complaints as $complaint)
-                        <li class="bg-gray-100 shadow-md rounded-lg p-4 transition duration-200 ease-in-out transform hover:scale-105 hover:bg-gray-200">
+                        <li
+                            class="bg-gray-100 shadow-md rounded-lg p-4 transition duration-200 ease-in-out transform hover:scale-105 hover:bg-gray-200">
                             <h2 class="text-xl font-semibold text-gray-800">{{ $complaint->title }}</h2>
                             <p class="text-gray-600">Category: {{ $complaint->category->name }}</p>
                             <p class="text-gray-600">Status:
@@ -33,8 +33,8 @@
 
         <!-- Button to create new complaint -->
         <div class="mt-6 flex justify-end">
-            <a href="{{ route('complaints.index') }}" 
-               class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">
+            <a href="{{ route('complaints.index') }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">
                 Create Complaint
             </a>
         </div>
