@@ -22,55 +22,58 @@
             </div>
         </form>
 
-        <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
-            <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left">Username</th>
-                    <th scope="col" class="px-6 py-3 text-left">Complaint Description</th>
-                    <th scope="col" class="px-6 py-3 text-left">Category</th>
-                    <th scope="col" class="px-6 py-3 text-left">Complaint Date</th>
-                    <th scope="col" class="px-6 py-3 text-left">Progress</th>
-                    <th scope="col" class="px-6 py-3 text-left">Doc</th>
-                    <th scope="col" class="px-6 py-3 text-left">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($complaints as $complaint)
-                    <tr class="border-b bg-white odd:bg-gray-50 even:bg-gray-100">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
-                            {{ $complaint->user->name }}
-                        </th>
-                        <td class="px-6 py-4 text-gray-700">
-                            {{ $complaint->description }}
-                        </td>
-                        <td class="px-6 py-4 text-gray-700">
-                            {{ $complaint->category->name }}
-                        </td>
-                        <td class="px-6 py-4 text-gray-700">
-                            {{ $complaint->created_at->format('M d, Y') }}
-                        </td>
-                        <td
-                            class="px-6 py-4 text-{{ $complaint->status->name == 'Not Processed' ? 'red' : ($complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
-                            {{ $complaint->status->name }}
-                        </td>
-                        <td class="px-6 py-4">
-                            @if ($complaint->file_path)
-                                <button onclick="showImage('{{ asset('storage/' . $complaint->file_path) }}')"
-                                    class="text-green-600 hover:underline">
-                                    Show
-                                </button>
-                            @else
-                                <span class="text-gray-500">No Doc</span>
-                            @endif
-                        </td>
-                        <td class="px-6 py-4">
-                            <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
-                        </td>
+        <div class="relative overflow-y-auto h-screen shadow-md sm:rounded-lg">
+            <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
+                <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left">Username</th>
+                        <th scope="col" class="px-6 py-3 text-left">Complaint Description</th>
+                        <th scope="col" class="px-6 py-3 text-left">Category</th>
+                        <th scope="col" class="px-6 py-3 text-left">Complaint Date</th>
+                        <th scope="col" class="px-6 py-3 text-left">Progress</th>
+                        <th scope="col" class="px-6 py-3 text-left">Doc</th>
+                        <th scope="col" class="px-6 py-3 text-left">Action</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($complaints as $complaint)
+                        <tr class="border-b bg-white odd:bg-gray-50 even:bg-gray-100">
+                            <th scope="row"
+                                class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                                {{ $complaint->user->name }}
+                            </th>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $complaint->description }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $complaint->category->name }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-700">
+                                {{ $complaint->created_at->format('M d, Y') }}
+                            </td>
+                            <td
+                                class="px-6 py-4 text-{{ $complaint->status->name == 'Not Processed' ? 'red' : ($complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
+                                {{ $complaint->status->name }}
+                            </td>
+                            <td class="px-6 py-4">
+                                @if ($complaint->file_path)
+                                    <button onclick="showImage('{{ asset('storage/' . $complaint->file_path) }}')"
+                                        class="text-green-600 hover:underline">
+                                        Show
+                                    </button>
+                                @else
+                                    <span class="text-gray-500">No Doc</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4">
+                                <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal to display image -->
