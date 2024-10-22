@@ -1,205 +1,66 @@
 @extends('layouts.app')
 @section('content')
 
-
+<form action="{{ route('complaints.search') }}" method="GET" class="max-w-md mx-auto">
+    <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+    <div class="relative">
+        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+            </svg>
+        </div>
+        <input type="search" name="query" id="default-search" class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Complaints..." required />
+        <button type="submit" class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+    </div>
+</form>
 
 <!-- Complaints Table -->
-<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+<div class="container mx-auto py-8">
+    <h2 class="text-2xl font-bold mb-6">Complaints Data</h2>
+    <table class="min-w-full bg-white border border-gray-200 shadow-md">
+        <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
             <tr>
-                <th scope="col" class="px-6 py-3">
-                    Username
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Complaint Description
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Category
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Complaint Date
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Progress
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Actions
-                </th>
+                <th scope="col" class="px-6 py-3 text-left">Username</th>
+                <th scope="col" class="px-6 py-3 text-left">Complaint Description</th>
+                <th scope="col" class="px-6 py-3 text-left">Category</th>
+                <th scope="col" class="px-6 py-3 text-left">Complaint Date</th>
+                <th scope="col" class="px-6 py-3 text-left">Progress</th>
+                <th scope="col" class="px-6 py-3 text-left">Doc</th>
+                <th scope="col" class="px-6 py-3 text-left">Action</th>
             </tr>
         </thead>
         <tbody>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Andi
+            @foreach($complaints as $complaint)
+            <tr class="border-b bg-white odd:bg-gray-50 even:bg-gray-100">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
+                    {{ $complaint->user->name }}
                 </th>
-                <td class="px-6 py-4">
-                    Streetlight not working
+                <td class="px-6 py-4 text-gray-700">
+                    {{ $complaint->description }}
+                </td>
+                <td class="px-6 py-4 text-gray-700">
+                    {{ $complaint->category->name }}
+                </td>
+                <td class="px-6 py-4 text-gray-700">
+                    {{ $complaint->created_at->format('M d, Y') }}
+                </td>
+                <td class="px-6 py-4 text-{{ $complaint->status->name == 'Not Processed' ? 'red' : ($complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
+                    {{ $complaint->status->name }}
                 </td>
                 <td class="px-6 py-4">
-                    Infrastructure
+                    @if ($complaint->file_path)
+                        <button onclick="showImage('{{ asset('storage/' . $complaint->file_path) }}')" class="text-green-600 hover:underline">
+                            Show
+                        </button>
+                    @else
+                        <span class="text-gray-500">No Doc</span>
+                    @endif
                 </td>
                 <td class="px-6 py-4">
-                    Oct 12, 2024
-                </td>
-                <td class="px-6 py-4 text-red-600">Not Processed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/andi_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
+                    <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
                 </td>
             </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Budi
-                </th>
-                <td class="px-6 py-4">
-                    Pothole in the road
-                </td>
-                <td class="px-6 py-4">
-                    Infrastructure
-                </td>
-                <td class="px-6 py-4">
-                    Oct 13, 2024
-                </td>
-                <td class="px-6 py-4 text-orange-600">Under Review</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/budi_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Siti
-                </th>
-                <td class="px-6 py-4">
-                    Garbage pile up
-                </td>
-                <td class="px-6 py-4">
-                    Sanitation
-                </td>
-                <td class="px-6 py-4">
-                    Oct 14, 2024
-                </td>
-                <td class="px-6 py-4 text-green-600">Completed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/siti_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Rina
-                </th>
-                <td class="px-6 py-4">
-                    Broken bench in park
-                </td>
-                <td class="px-6 py-4">
-                    Infrastructure
-                </td>
-                <td class="px-6 py-4">
-                    Oct 15, 2024
-                </td>
-                <td class="px-6 py-4 text-red-600">Not Processed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/rina_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Joko
-                </th>
-                <td class="px-6 py-4">
-                    Water leakage
-                </td>
-                <td class="px-6 py-4">
-                    Sanitation
-                </td>
-                <td class="px-6 py-4">
-                    Oct 16, 2024
-                </td>
-                <td class="px-6 py-4 text-orange-600">Under Review</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/joko_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Nia
-                </th>
-                <td class="px-6 py-4">
-                    Damaged road sign
-                </td>
-                <td class="px-6 py-4">
-                    Infrastructure
-                </td>
-                <td class="px-6 py-4">
-                    Oct 17, 2024
-                </td>
-                <td class="px-6 py-4 text-green-600">Completed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/nia_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Rudi
-                </th>
-                <td class="px-6 py-4">
-                    Faulty traffic light
-                </td>
-                <td class="px-6 py-4">
-                    Traffic
-                </td>
-                <td class="px-6 py-4">
-                    Oct 18, 2024
-                </td>
-                <td class="px-6 py-4 text-red-600">Not Processed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/rudi_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Siti Aisyah
-                </th>
-                <td class="px-6 py-4">
-                    Flooding issue
-                </td>
-                <td class="px-6 py-4">
-                    Sanitation
-                </td>
-                <td class="px-6 py-4">
-                    Oct 19, 2024
-                </td>
-                <td class="px-6 py-4 text-orange-600">Under Review</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/siti_aisyah_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
-            <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Tono
-                </th>
-                <td class="px-6 py-4">
-                    Broken fence
-                </td>
-                <td class="px-6 py-4">
-                    Infrastructure
-                </td>
-                <td class="px-6 py-4">
-                    Oct 20, 2024
-                </td>
-                <td class="px-6 py-4 text-green-600">Completed</td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                    <button onclick="showImage('/path/to/tono_image.jpg')" class="font-medium text-green-600 dark:text-green-500 hover:underline ml-2">View Photo</button>
-                </td>
-            </tr>
+            @endforeach
         </tbody>
     </table>
 </div>
