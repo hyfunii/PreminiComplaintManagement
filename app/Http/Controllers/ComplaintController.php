@@ -18,6 +18,7 @@ class ComplaintController extends Controller
     public function dashboard()
     {
         if (!Auth::check()) {
+
             return redirect()->route('login')->with('warning', 'Please login to access this page.');
         }
 
@@ -25,7 +26,7 @@ class ComplaintController extends Controller
 
         if ($user->role_id == 1) {
             $complaints = Complaint::with('user', 'category', 'status')
-                ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
+                ->whereDoesntHave('responses')
                 ->get();
             return view('admin.complaints', compact('complaints'));
         } elseif ($user->role_id == 2) {
@@ -35,8 +36,6 @@ class ComplaintController extends Controller
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
-
-        return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
 
     public function index()
@@ -49,7 +48,7 @@ class ComplaintController extends Controller
 
         if ($user->role_id == 1) {
             $complaints = Complaint::with('user', 'category', 'status')
-                ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
+                ->whereDoesntHave('responses')
                 ->get();
             return view('admin.complaints', compact('complaints'));
         } elseif ($user->role_id == 2) {
@@ -73,6 +72,7 @@ class ComplaintController extends Controller
             'description' => 'required|string',
             'file_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
+
 
         $filePath = null;
         if ($request->hasFile('file_path')) {
@@ -100,4 +100,21 @@ class ComplaintController extends Controller
 
         return redirect()->route('complaints.dashboard')->with('success', 'Your complaint has been successfully canceled.');
     }
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:1',
+        ]);
+
+        $query = $request->input('query');
+
+        $complaints = Complaint::with('user', 'category', 'status')
+            ->whereDoesntHave('responses')
+            ->where('title', 'LIKE', "%{$query}%")
+            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->get();
+
+        return view('admin.complaints', compact('complaints'));
+    }
+
 }

@@ -50,8 +50,9 @@ class ResponseController extends Controller
         $response->response_text = $request->response_text;
         $response->save();
 
+
         $complaint = Complaint::findOrFail($request->complaint_id);
-        $complaint->status_id = 2;
+        $complaint->status_id = 2; // Status 'Proses'
         $complaint->save();
 
         return redirect()->route('complaints.index')->with('success', 'Respon berhasil disimpan dan status keluhan diperbarui.');
@@ -64,7 +65,6 @@ class ResponseController extends Controller
         $complaints = Complaint::where('user_id', $user->id)
             ->with('category', 'status')
             ->get();
-
         return view('user.our_complaint', compact('complaints'));
     }
 
@@ -83,4 +83,20 @@ class ResponseController extends Controller
 
         return view('user.our_response', compact('complaint', 'response'));
     }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'query' => 'required|string|min:1',
+        ]);
+
+        $query = $request->input('query');
+
+        $responses = Response::with('complaint.user')
+            ->where('response_text', 'LIKE', "%{$query}%")
+            ->get();
+
+        return view('admin.response', compact('responses'));
+    }
+
 }

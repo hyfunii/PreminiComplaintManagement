@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('complaint_id')->constrained('complaints')->onDelete('cascade');
+            $table->foreignId('complaint_id')->constrained()->onDelete('cascade'); // Relasi ke tabel complaints
             $table->string('file_path');
             $table->string('file_type');
             $table->timestamps();
