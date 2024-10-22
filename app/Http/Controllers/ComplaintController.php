@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Complaint;
+use App\Models\ComplaintStatus;
 use App\Models\ComplaintCategory;
 use App\Models\Response;
 use Auth;
@@ -25,10 +26,22 @@ class ComplaintController extends Controller
         $user = Auth::user();
 
         if ($user->role_id == 1) {
-            $complaints = Complaint::with('user', 'category', 'status')
-                ->whereDoesntHave('responses')
-                ->get();
-            return view('admin.dashboard', compact('complaints'));
+            // $complaints = Complaint::with('user', 'category', 'status')
+            //     ->whereDoesntHave('responses')
+            //     ->get();
+            // Mengambil jumlah complaint berdasarkan status
+            $complaintsByStatus = Complaint::select('status_id', ComplaintStatus::raw('count(*) as total'))
+                ->groupBy('status_id')
+                ->pluck('total', 'status_id');
+
+            // Mengambil total data untuk masing-masing status
+            $submitted = $complaintsByStatus[1] ?? 0; // Status 1: Submitted
+            $processed = $complaintsByStatus[2] ?? 0; // Status 2: Processed
+            $done = $complaintsByStatus[3] ?? 0;      // Status 3: Done
+
+            // Mengirimkan data ke view
+            return view('admin.dashboard', compact('submitted', 'processed', 'done'));
+
         } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
@@ -36,7 +49,7 @@ class ComplaintController extends Controller
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
-        
+
         return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
 
