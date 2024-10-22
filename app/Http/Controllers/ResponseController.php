@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+// use Response;
+use App\Models\Response;
+use App\Models\Complaint;
+use Auth;
 
 class ResponseController extends Controller
 {
@@ -53,6 +57,7 @@ class ResponseController extends Controller
         $response->admin_id = $request->admin_id;
         $response->response_text = $request->response_text;
         $response->save();
+
 
         // Update status keluhan di tabel complaints menjadi status ID 2 (proses)
         $complaint = Complaint::findOrFail($request->complaint_id);

@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('responses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('complaint_id')->constrained(); // Relasi ke tabel complaints
+            $table->foreignId('complaint_id')->constrained()->onDelete('cascade'); // Relasi ke tabel complaints
             $table->foreignId('admin_id')->constrained('users'); // Relasi ke tabel users, admin yang menanggapi
             $table->text('response_text');
             $table->timestamps();

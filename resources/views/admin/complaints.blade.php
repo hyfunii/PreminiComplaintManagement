@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
 
 <form action="{{ route('complaints.search') }}" method="GET" class="max-w-md mx-auto">
@@ -71,20 +72,27 @@
         <img id="complaintImage" class="max-w-full max-h-full" src="" alt="Complaint Proof">
         <button onclick="closeImage()" class="absolute top-2 right-2 bg-white px-2 py-1 text-black">Close</button>
     </div>
-</div>
 
-<script>
-    function showImage(imagePath) {
-        var modal = document.getElementById('imageModal');
-        var image = document.getElementById('complaintImage');
-        image.src = imagePath;
-        modal.classList.remove('hidden');
-    }
+    <!-- Modal to display image -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
+        <div class="relative max-w-3xl w-1/2 p-4 bg-white rounded-lg shadow-lg">
+            <img id="complaintImage" class="w-full h-auto max-h-[80vh] object-contain" src="" alt="Complaint Proof">
+            <button onclick="closeImage()"
+                class="absolute top-2 right-2 bg-white px-2 py-1 text-black rounded-lg border border-gray-300">Close</button>
+        </div>
+    </div>
 
-    function closeImage() {
-        var modal = document.getElementById('imageModal');
-        modal.classList.add('hidden');
-    }
-</script>
+    <script>
+        function showImage(imagePath) {
+            var modal = document.getElementById('imageModal');
+            var image = document.getElementById('complaintImage');
+            image.src = imagePath;
+            modal.classList.remove('hidden');
+        }
 
+        function closeImage() {
+            var modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+        }
+    </script>
 @endsection

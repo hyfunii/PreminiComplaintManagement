@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('admin.responses');
-});
+use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ResponseController;
 
 // Route::get('/', [ComplaintController::class, 'home']);
 Route::get('/', [ComplaintController::class, 'dashboard'])->name('complaints.dashboard');

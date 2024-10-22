@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Complaint;
+use App\Models\ComplaintCategory;
+use App\Models\Response;
+use Auth;
 
 class ComplaintController extends Controller
 {
@@ -15,7 +19,8 @@ class ComplaintController extends Controller
     {
         // Cek apakah user sudah login
         if (!Auth::check()) {
-            // Jika tidak login, arahkan ke halaman login
+            // Jika tidak login, arahkan ke halaman FFlogin
+
             return redirect()->route('login')->with('warning', 'Please login to access this page.');
         }
 
@@ -40,9 +45,7 @@ class ComplaintController extends Controller
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
-
         // Jika peran tidak dikenali, redirect ke halaman login
-        return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
 
     public function index()
@@ -75,8 +78,11 @@ class ComplaintController extends Controller
             return view('user.complaints', compact('complaints', 'categories'));
         }
 
-        // Jika peran tidak dikenali, redirect ke halaman login
+
+
+
         return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
+
     }
 
 
@@ -86,20 +92,19 @@ class ComplaintController extends Controller
             'category_id' => 'required|exists:complaint_categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'file_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048', // Maksimal 2MB
+            'file_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        // Simpan file jika diupload
+
         $filePath = null;
         if ($request->hasFile('file_path')) {
             $filePath = $request->file('file_path')->store('complaints', 'public');
         }
 
-        // Simpan pengaduan
         Complaint::create([
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
-            'status_id' => 1, // Set status default, misal "Menunggu" atau "Pending"
+            'status_id' => 1,
             'title' => $request->title,
             'description' => $request->description,
             'file_path' => $filePath,
@@ -110,14 +115,12 @@ class ComplaintController extends Controller
 
     public function search(Request $request)
     {
-        // Validasi input pencarian
         $request->validate([
             'query' => 'required|string|min:1',
         ]);
 
         $query = $request->input('query');
 
-        // Cari pengaduan yang sesuai dengan query pencarian
         $complaints = Complaint::with('user', 'category', 'status')
             ->whereDoesntHave('responses')
             ->where('title', 'LIKE', "%{$query}%")
