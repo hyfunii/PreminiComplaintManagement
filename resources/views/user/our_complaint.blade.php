@@ -4,6 +4,14 @@
     <div class="container mx-auto py-8">
         <h1 class="text-2xl font-bold mb-6">My Complaints</h1>
 
+        @if (session('success'))
+            <div id="toast-bottom-left"
+                class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800"
+                role="alert">
+                <div class="text-sm font-normal">Top left positioning.</div>
+            </div>
+        @endif
+
         @if ($complaints->isEmpty())
             <p class="text-gray-600">You have not submitted any complaints yet.</p>
         @else

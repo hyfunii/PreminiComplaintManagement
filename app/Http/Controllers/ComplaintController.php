@@ -28,7 +28,7 @@ class ComplaintController extends Controller
             $complaints = Complaint::with('user', 'category', 'status')
                 ->whereDoesntHave('responses')
                 ->get();
-            return view('admin.complaints', compact('complaints'));
+            return view('admin.dashboard', compact('complaints'));
         } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
@@ -36,6 +36,8 @@ class ComplaintController extends Controller
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
+        
+        return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
 
     public function index()
@@ -55,7 +57,6 @@ class ComplaintController extends Controller
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
                 ->where('user_id', $user->id)
-                ->whereDoesntHave('responses')
                 ->get();
             return view('user.complaints', compact('complaints', 'categories'));
         }

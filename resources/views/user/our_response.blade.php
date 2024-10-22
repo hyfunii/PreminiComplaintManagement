@@ -25,5 +25,11 @@
                 <p class="text-red-500">This complaint has not been responded to yet.</p>
             @endif
         </div>
+        <div class="mt-6 flex justify-end">
+            <a href="{{ route('complaints.dashboard') }}"
+                class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">
+                Back
+            </a>
+        </div>
     </div>
 @endsection

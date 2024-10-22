@@ -4,7 +4,7 @@
     <div class="container mx-auto py-8">
         <h1 class="text-2xl font-bold mb-6">Response List</h1>
 
-        <form action="{{ route('response.search') }}" method="GET" class="max-w-md mx-auto mb-4">
+        <form action="{{ route('response.search') }}" method="GET" class="max-w-md mx-auto mb-4 ml-0">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -22,7 +22,7 @@
             </div>
         </form>
 
-        <table class="min-w-full bg-white border border-gray-200 shadow-md">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
             <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                 <tr>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">No</th>
