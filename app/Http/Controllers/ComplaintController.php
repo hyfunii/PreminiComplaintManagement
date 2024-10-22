@@ -28,12 +28,10 @@ class ComplaintController extends Controller
                 ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
                 ->get();
             return view('admin.complaints', compact('complaints'));
-        }
-        elseif ($user->role_id == 2) {
+        } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
                 ->where('user_id', $user->id)
-                ->whereDoesntHave('responses')
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
@@ -54,8 +52,7 @@ class ComplaintController extends Controller
                 ->whereDoesntHave('responses') // Memastikan keluhan belum direspons
                 ->get();
             return view('admin.complaints', compact('complaints'));
-        }
-        elseif ($user->role_id == 2) {
+        } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
                 ->where('user_id', $user->id)
@@ -91,7 +88,16 @@ class ComplaintController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()->back()->with('success', 'Pengaduan berhasil dikirim.');
+        return redirect()->route('complaints.dashboard')->with('success', 'Pengaduan berhasil dikirim.');
     }
 
+    public function destroy($id)
+    {
+        $complaint = Complaint::where('id', $id)->where('user_id', Auth::id())->firstOrFail();
+
+        $complaint->files()->delete();
+        $complaint->delete();
+
+        return redirect()->route('complaints.dashboard')->with('success', 'Your complaint has been successfully canceled.');
+    }
 }

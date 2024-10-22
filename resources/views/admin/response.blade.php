@@ -8,6 +8,7 @@
                 <tr>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">No</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint</th>
+                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint by</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Responded by</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Response</th>
                     <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint Status</th>
@@ -19,6 +20,7 @@
                     <tr class="border-t">
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $key + 1 }}</td>
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->complaint->title }}</td>
+                        <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->complaint->user->name }}</td>
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->admin->name }}</td>
                         <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->response_text }}</td>
 

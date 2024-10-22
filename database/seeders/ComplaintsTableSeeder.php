@@ -14,7 +14,7 @@ class ComplaintsTableSeeder extends Seeder
             [
                 'user_id' => 2, // Assuming John Doe (user)
                 'category_id' => 1, // Infrastruktur
-                'status_id' => 1, // Diajukan
+                'status_id' => 2, // Diajukan
                 'title' => 'Jalan Berlubang di Daerah A',
                 'description' => 'Jalan berlubang di daerah A sangat berbahaya bagi pengendara.',
                 'file_path' => '/files/jalan-berlubang.jpg',

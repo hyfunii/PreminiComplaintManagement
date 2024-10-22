@@ -28,6 +28,7 @@ Route::post('/responses/store', [ResponseController::class, 'store'])->name('res
 Route::get('/responses/create/{complaint_id}', [ResponseController::class, 'create'])->name('responses.create');
 Route::get('/my-complaints', [ResponseController::class, 'ourComplaints'])->name('our_complaints');
 Route::get('/my-complaints/{id}', [ResponseController::class, 'ourResponse'])->name('our_response');
+Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy'])->name('complaints.destroy');
 
 // Route::get('/', function () {
 //     return view('admin.complaints');

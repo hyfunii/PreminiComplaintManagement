@@ -25,13 +25,22 @@
                                 class="mt-2 inline-block bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">
                                 View Details
                             </a>
+                            <form action="{{ route('complaints.destroy', $complaint->id) }}" method="POST"
+                                class="inline-block">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="mt-2 bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105"
+                                    onclick="return confirm('Are you sure you want to cancel this complaint?')">
+                                    Cancel Complaint
+                                </button>
+                            </form>
                         </li>
                     @endforeach
                 </ul>
             </div>
         @endif
 
-        <!-- Button to create new complaint -->
         <div class="mt-6 flex justify-end">
             <a href="{{ route('complaints.index') }}"
                 class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">

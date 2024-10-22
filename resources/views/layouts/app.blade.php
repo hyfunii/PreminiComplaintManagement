@@ -42,8 +42,7 @@
                                     @if (Auth::check() && Auth::user()->role_id == 1)
                                         <img class="w-8 h-8 rounded-full" src="{{ asset('image/profile.png') }}"
                                             alt="admin photo">
-                                    @else
-                                        (Auth::check() && Auth::user()->role_id == 2)
+                                    @elseif (Auth::check() && Auth::user()->role_id == 2)
                                         <img class="w-8 h-8 rounded-full" src="{{ asset('image/user.png') }}"
                                             alt="user photo">
                                     @endif
