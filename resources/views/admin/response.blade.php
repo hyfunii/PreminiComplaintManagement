@@ -4,6 +4,7 @@
     <div class="container mx-auto py-8">
         <h1 class="text-2xl font-bold mb-6">Response List</h1>
 
+        <!-- Search Form -->
         <form action="{{ route('response.search') }}" method="GET" class="max-w-md mx-auto mb-4 ml-0">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
             <div class="relative">
@@ -22,31 +23,62 @@
             </div>
         </form>
 
-        <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
+        <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px] mb-8">
             <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                 <tr>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">No</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Responded by</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Response</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Complaint Status</th>
-                    <th class="px-4 py-2 border text-left text-sm font-semibold text-gray-700">Action</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">No</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Responded by</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Response</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($responses as $key => $response)
-                    <tr class="border-t">
-                        <td class="px-4 py-2 border text-sm text-gray-700">{{ $key + 1 }}</td>
-                        <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->complaint->title }}</td>
-                        <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->admin->name }}</td>
-                        <td class="px-4 py-2 border text-sm text-gray-700">{{ $response->response_text }}</td>
+                    <tr class=>
+                        <td class="px-6 py-4 text-gray-700">{{ $key + 1 }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->complaint->title }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->admin->name }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->response_text }}</td>
                         <td
                             class="px-6 py-4 text-{{ $response->complaint->status->name == 'Not Processed' ? 'red' : ($response->complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
                             {{ $response->complaint->status->name }}
                         </td>
-                        <td class="px-4 py-2 border text-center">
+                        <td class="px-6 py-4 text-gray-700">
                             <a href="{{ route('response.detail', $response->id) }}"
                                 class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Details</a>
+                            <a href="{{ route('response.cancel', $response->id) }}"
+                                class="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-4 rounded">Cancel</a>
+                            <a href="{{ route('response.done', $response->id) }}"
+                                class="bg-green-500 hover:bg-green-600 text-white font-semibold py-1 px-4 rounded">Done</a>
+                        </td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <h2 class="text-xl font-bold mb-4">Done Complaints</h2>
+        <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
+            <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">No</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Responded by</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Response</th>
+                    <th class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($doneResponses as $key => $response)
+                    <tr class="border-t">
+                        <td class="px-6 py-4 text-gray-700">{{ $key + 1 }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->complaint->title }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->admin->name }}</td>
+                        <td class="px-6 py-4 text-gray-700">{{ $response->response_text }}</td>
+                        <td
+                            class="px-6 py-4 text-{{ $response->complaint->status->name == 'Not Processed' ? 'red' : ($response->complaint->status->name == 'Under Review' ? 'orange' : 'green') }}-600">
+                            {{ $response->complaint->status->name }}
                         </td>
                     </tr>
                 @endforeach

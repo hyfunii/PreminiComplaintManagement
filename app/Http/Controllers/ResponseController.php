@@ -16,10 +16,15 @@ class ResponseController extends Controller
             return redirect()->route('login')->with('warning', 'Please login to access this page.');
         }
 
-        $user = Auth::user();
-        $responses = Response::with('admin', 'complaint')->get();
+        $responses = Response::whereHas('complaint', function ($query) {
+            $query->where('status_id', '!=', 3);
+        })->with('admin', 'complaint')->get();
 
-        return view('admin.response', compact('responses'));
+        $doneResponses = Response::whereHas('complaint', function ($query) {
+            $query->where('status_id', 3);
+        })->with('admin', 'complaint')->get();
+
+        return view('admin.response', compact('responses', 'doneResponses'));
     }
 
     public function detail($id)
@@ -52,10 +57,32 @@ class ResponseController extends Controller
 
 
         $complaint = Complaint::findOrFail($request->complaint_id);
-        $complaint->status_id = 2; // Status 'Proses'
+        $complaint->status_id = 2;
         $complaint->save();
 
         return redirect()->route('complaints.index')->with('success', 'Respon berhasil disimpan dan status keluhan diperbarui.');
+    }
+
+    public function cancel($id)
+    {
+        $response = Response::findOrFail($id);
+        $complaint = $response->complaint;
+
+        $complaint->status_id = 1;
+        $complaint->save();
+
+        return redirect()->route('response.index')->with('success', 'Complaint status updated to Not Processed.');
+    }
+
+    public function done($id)
+    {
+        $response = Response::findOrFail($id);
+        $complaint = $response->complaint;
+
+        $complaint->status_id = 3;
+        $complaint->save();
+
+        return redirect()->route('response.index')->with('success', 'Complaint status updated to Done.');
     }
 
     public function ourComplaints()

@@ -26,13 +26,13 @@
             <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left">Username</th>
-                        <th scope="col" class="px-6 py-3 text-left">Complaint Description</th>
-                        <th scope="col" class="px-6 py-3 text-left">Category</th>
-                        <th scope="col" class="px-6 py-3 text-left">Complaint Date</th>
-                        <th scope="col" class="px-6 py-3 text-left">Progress</th>
-                        <th scope="col" class="px-6 py-3 text-left">Doc</th>
-                        <th scope="col" class="px-6 py-3 text-left">Action</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Username</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Description</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Progress</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Doc</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
                     </tr>
                 </thead>
                 <tbody>
