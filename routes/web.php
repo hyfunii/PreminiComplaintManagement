@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\FileController;
 
 // Route::get('/', [ComplaintController::class, 'home']);
 Route::get('/', [ComplaintController::class, 'dashboard'])->name('complaints.dashboard');
@@ -33,6 +34,9 @@ Route::get('response/search', [ResponseController::class, 'search'])->name('resp
 Route::get('/complaints/search', [ComplaintController::class, 'search'])->name('complaints.search');
 Route::get('/response/cancel/{id}', [ResponseController::class, 'cancel'])->name('response.cancel');
 Route::get('/response/done/{id}', [ResponseController::class, 'done'])->name('response.done');
+Route::put('/complaints/{id}', [ComplaintController::class, 'update'])->name('complaints.update');
+Route::get('/admin/files', [FileController::class, 'index'])->name('admin.files');
+Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('complaints.show');
 
 // Route::get('/', function () {
 //     return view('admin.complaints');
@@ -64,4 +68,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -22,14 +22,16 @@
             </div>
         </form>
 
-        <div class="relative overflow-y-auto h-screen shadow-md sm:rounded-lg">
+        <div class="relative overflow-y-auto max-h-screen shadow-md sm:rounded-lg">
             <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Username</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Description</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint
+                            Description</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Date
+                        </th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Progress</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Doc</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
@@ -67,7 +69,10 @@
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-1 px-4 rounded">Response</a>
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded mr-2">Response</a>
+
+                                <a href="{{ route('complaints.show', $complaint->id) }}"
+                                    class="bg-green-500 hover:bg-green-700 text-white font-semibold py-1 px-4 rounded">Details</a>
                             </td>
                         </tr>
                     @endforeach
@@ -76,35 +81,25 @@
         </div>
     </div>
 
-    <!-- Modal to display image -->
-    <div id="imageModal"
-        class="hidden fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center">
-        <div class="relative">
-            <img id="complaintImage" class="max-w-full max-h-full" src="" alt="Complaint Proof">
-            <button onclick="closeImage()" class="absolute top-2 right-2 bg-white px-2 py-1 text-black">Close</button>
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
+        <div class="relative max-w-3xl w-1/2 p-4 bg-white rounded-lg shadow-lg">
+            <img id="complaintImage" class="w-full h-auto max-h-[80vh] object-contain" src="" alt="Complaint Proof">
+            <button onclick="closeImage()"
+                class="absolute top-2 right-2 bg-white px-2 py-1 text-black rounded-lg border border-gray-300">Close</button>
         </div>
+    </div>
 
-        <!-- Modal to display image -->
-        <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center">
-            <div class="relative max-w-3xl w-1/2 p-4 bg-white rounded-lg shadow-lg">
-                <img id="complaintImage" class="w-full h-auto max-h-[80vh] object-contain" src=""
-                    alt="Complaint Proof">
-                <button onclick="closeImage()"
-                    class="absolute top-2 right-2 bg-white px-2 py-1 text-black rounded-lg border border-gray-300">Close</button>
-            </div>
-        </div>
+    <script>
+        function showImage(imagePath) {
+            var modal = document.getElementById('imageModal');
+            var image = document.getElementById('complaintImage');
+            image.src = imagePath;
+            modal.classList.remove('hidden');
+        }
 
-        <script>
-            function showImage(imagePath) {
-                var modal = document.getElementById('imageModal');
-                var image = document.getElementById('complaintImage');
-                image.src = imagePath;
-                modal.classList.remove('hidden');
-            }
-
-            function closeImage() {
-                var modal = document.getElementById('imageModal');
-                modal.classList.add('hidden');
-            }
-        </script>
-    @endsection
+        function closeImage() {
+            var modal = document.getElementById('imageModal');
+            modal.classList.add('hidden');
+        }
+    </script>
+@endsection

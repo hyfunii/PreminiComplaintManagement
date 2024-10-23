@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\File;
 use App\Models\Complaint;
 use App\Models\ComplaintStatus;
 use App\Models\ComplaintCategory;
-use App\Models\Response;
 use Auth;
 
 class ComplaintController extends Controller
@@ -26,26 +26,21 @@ class ComplaintController extends Controller
         $user = Auth::user();
 
         if ($user->role_id == 1) {
-            // $complaints = Complaint::with('user', 'category', 'status')
-            //     ->whereDoesntHave('responses')
-            //     ->get();
-            // Mengambil jumlah complaint berdasarkan status
             $complaintsByStatus = Complaint::select('status_id', ComplaintStatus::raw('count(*) as total'))
                 ->groupBy('status_id')
                 ->pluck('total', 'status_id');
 
-            // Mengambil total data untuk masing-masing status
-            $submitted = $complaintsByStatus[1] ?? 0; // Status 1: Submitted
-            $processed = $complaintsByStatus[2] ?? 0; // Status 2: Processed
-            $done = $complaintsByStatus[3] ?? 0;      // Status 3: Done
+            $submitted = $complaintsByStatus[1] ?? 0;
+            $processed = $complaintsByStatus[2] ?? 0;
+            $done = $complaintsByStatus[3] ?? 0;
 
-            // Mengirimkan data ke view
             return view('admin.dashboard', compact('submitted', 'processed', 'done'));
 
         } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
             $complaints = Complaint::with('category', 'status')
                 ->where('user_id', $user->id)
+                ->orderBy('created_at', 'desc')
                 ->get();
             return view('user.our_complaint', compact('complaints', 'categories'));
         }
@@ -77,6 +72,13 @@ class ComplaintController extends Controller
         return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
     }
 
+    public function show($id)
+    {
+        $complaint = Complaint::with('user', 'category', 'status')->findOrFail($id);
+
+        return view('admin.complaint_details', compact('complaint'));
+    }
+
 
     public function store(Request $request)
     {
@@ -87,13 +89,12 @@ class ComplaintController extends Controller
             'file_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-
         $filePath = null;
         if ($request->hasFile('file_path')) {
             $filePath = $request->file('file_path')->store('complaints', 'public');
         }
 
-        Complaint::create([
+        $complaint = Complaint::create([
             'user_id' => Auth::id(),
             'category_id' => $request->category_id,
             'status_id' => 1,
@@ -102,7 +103,42 @@ class ComplaintController extends Controller
             'file_path' => $filePath,
         ]);
 
-        return redirect()->route('complaints.dashboard')->with('success', 'Pengaduan berhasil dikirim.');
+        if ($filePath) {
+            File::create([
+                'complaint_id' => $complaint->id,
+                'file_path' => $filePath,
+                'file_type' => $request->file('file_path')->getClientMimeType(),
+            ]);
+        }
+
+        return redirect()->route('complaints.dashboard')->with('success', 'Complaint sent!');
+    }
+
+
+    public function edit($id)
+    {
+        $complaint = Complaint::findOrFail($id);
+        $categories = ComplaintCategory::all();
+
+        return view('complaints.edit', compact('complaint', 'categories'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id',
+        ]);
+
+        $complaint = Complaint::findOrFail($id);
+
+        $complaint->title = $request->input('title');
+        $complaint->description = $request->input('description');
+        $complaint->category_id = $request->input('category_id');
+        $complaint->save();
+
+        return redirect()->back()->with('success', 'Complaint updated successfully!');
     }
 
     public function destroy($id)

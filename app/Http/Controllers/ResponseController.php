@@ -66,12 +66,10 @@ class ResponseController extends Controller
     public function cancel($id)
     {
         $response = Response::findOrFail($id);
-        $complaint = $response->complaint;
 
-        $complaint->status_id = 1;
-        $complaint->save();
+        $response->delete();
 
-        return redirect()->route('response.index')->with('success', 'Complaint status updated to Not Processed.');
+        return redirect()->route('response.index')->with('success', 'Response has been successfully deleted.');
     }
 
     public function done($id)

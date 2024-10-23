@@ -147,7 +147,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#"
+                        <a href="{{ route('admin.files') }}"
                             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                                 aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -201,6 +201,24 @@
 
     <div class="p-4 @if (Auth::check() && Auth::user()->role->name == 'admin') sm:ml-64 @endif">
         <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
+            @if (session('success'))
+                <div id="toast-bottom-left"
+                    class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 z-50"
+                    role="alert">
+                    <!-- Icon -->
+                    <div
+                        class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z" />
+                        </svg>
+                        <span class="sr-only">Check icon</span>
+                    </div>
+                    <!-- Success Message -->
+                    <div class="text-sm font-normal">{{ session('success') }}</div>
+                </div>
+            @endif
             @yield('content')
         </div>
     </div>
@@ -215,6 +233,21 @@
                 sortable: false
             });
         }
+    </script>
+    <script>
+        setTimeout(function() {
+            var toast = document.getElementById('toast-bottom-left');
+            if (toast) {
+                // Add fade-out effect (optional)
+                toast.style.transition = 'opacity 0.5s ease';
+                toast.style.opacity = '0';
+
+                // Remove the toast from the DOM after fading out
+                setTimeout(function() {
+                    toast.remove();
+                }, 500); // Wait for the fade-out transition to finish (0.5s)
+            }
+        }, 2000); // Auto hide after 5 seconds
     </script>
     @yield('scripts')
 </body>
