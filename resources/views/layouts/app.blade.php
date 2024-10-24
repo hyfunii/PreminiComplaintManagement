@@ -69,7 +69,7 @@
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                     role="menuitem">Dashboard</a>
                                             @elseif(Auth::user()->role_id == 2)
-                                                <a href="{{ route('our_complaints') }}"
+                                                <a href="{{ route('complaints.dashboard') }}"
                                                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                     role="menuitem">your complaint</a>
                                             @endif
@@ -205,7 +205,6 @@
                 <div id="toast-bottom-left"
                     class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 z-50"
                     role="alert">
-                    <!-- Icon -->
                     <div
                         class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-green-500 bg-green-100 rounded-lg dark:bg-green-800 dark:text-green-200">
                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
@@ -215,8 +214,22 @@
                         </svg>
                         <span class="sr-only">Check icon</span>
                     </div>
-                    <!-- Success Message -->
                     <div class="text-sm font-normal">{{ session('success') }}</div>
+                </div>
+            @elseif (session('error'))
+                <div id="toast-bottom-left"
+                    class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 z-50"
+                    role="alert">
+                    <div
+                        class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-orange-500 bg-orange-100 rounded-lg dark:bg-green-800 dark:text-green-200">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                        <span class="sr-only">Check icon</span>
+                    </div>
+                    <div class="text-sm font-normal">{{ session('error') }}</div>
                 </div>
             @endif
             @yield('content')
@@ -234,20 +247,43 @@
             });
         }
     </script>
+    {{-- toast auto hide --}}
     <script>
         setTimeout(function() {
             var toast = document.getElementById('toast-bottom-left');
             if (toast) {
-                // Add fade-out effect (optional)
                 toast.style.transition = 'opacity 0.5s ease';
                 toast.style.opacity = '0';
 
-                // Remove the toast from the DOM after fading out
                 setTimeout(function() {
                     toast.remove();
-                }, 500); // Wait for the fade-out transition to finish (0.5s)
+                }, 500);
             }
-        }, 2000); // Auto hide after 5 seconds
+        }, 5000);
+    </script>
+    {{-- fullscreen button --}}
+    <script>
+        document.getElementById('fullscreenBtn').addEventListener('click', function() {
+            const img = document.getElementById('complaintImage');
+            if (img.requestFullscreen) {
+                img.requestFullscreen();
+            } else if (img.mozRequestFullScreen) {
+                img.mozRequestFullScreen();
+            } else if (img.webkitRequestFullscreen) {
+                img.webkitRequestFullscreen();
+            } else if (img.msRequestFullscreen) {
+                img.msRequestFullscreen();
+            }
+        });
+    </script>
+    {{-- search --}}
+    <script>
+        document.getElementById('default-search').addEventListener('input', function() {
+            const query = this.value.trim();
+            if (query.length > 0) {
+                document.getElementById('searchForm').submit();
+            }
+        });
     </script>
     @yield('scripts')
 </body>

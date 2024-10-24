@@ -27,8 +27,7 @@
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Username</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint
-                            Description</th>
+                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Category</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Complaint Date
                         </th>
@@ -45,7 +44,7 @@
                                 {{ $complaint->user->name }}
                             </th>
                             <td class="px-6 py-4 text-gray-700">
-                                {{ $complaint->description }}
+                                {{ $complaint->title }}
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 {{ $complaint->category->name }}

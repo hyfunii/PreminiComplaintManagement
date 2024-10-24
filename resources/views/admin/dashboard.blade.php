@@ -5,43 +5,18 @@
         <h1 class="text-3xl font-semibold mb-4">Dashboard Keluhan</h1>
 
         <div class="flex justify-between">
-            <!-- Complain Status Overview -->
             <div class="flex-1 max-w-md bg-white rounded-lg shadow dark:bg-gray-800 p-6 me-4">
-                <!-- Chart Header -->
                 <h5 class="text-xl font-bold text-gray-900 dark:text-white mb-4">Complain Status Overview</h5>
 
-                <!-- Checkbox filter -->
-                <div class="flex mb-4" id="complainStatusFilter">
-                    <div class="flex items-center me-4">
-                        <input id="submitted" type="checkbox" value="1"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-                        <label for="submitted"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Submitted</label>
-                    </div>
-                    <div class="flex items-center me-4">
-                        <input id="processed" type="checkbox" value="2"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-                        <label for="processed"
-                            class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Processed</label>
-                    </div>
-                    <div class="flex items-center me-4">
-                        <input id="done" type="checkbox" value="3"
-                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded">
-                        <label for="done" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Done</label>
-                    </div>
-                </div>
-
-                <!-- Donut Chart -->
                 <div id="complaint-status-chart" class="py-6"></div>
             </div>
 
-            <!-- Chart Ringkasan Status -->
             <div class="flex-1 max-w-md bg-white rounded-lg shadow dark:bg-gray-800 p-6">
                 <ul class="flex flex-wrap text-xs font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
                     id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
                     <li class="me-1">
-                        <button id="about-tab" data-tabs-target="#about" type="button" role="tab"
-                            aria-controls="about" aria-selected="true"
+                        <button id="about-tab" data-tabs-target="#about" type="button" role="tab" aria-controls="about"
+                            aria-selected="true"
                             class="inline-block p-2 text-blue-600 rounded-ss-lg hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-blue-500">Tentang
                             Aplikasi</button>
                     </li>
@@ -74,10 +49,10 @@
                         <a href="#"
                             class="inline-flex items-center font-medium text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-700">
                             Pelajari lebih lanjut
-                            <svg class="w-2 h-2 ms-2 rtl:rotate-180" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 9 4-4-4-4" />
+                            <svg class="w-2 h-2 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 6 10">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="m1 9 4-4-4-4" />
                             </svg>
                         </a>
                     </div>
@@ -132,10 +107,8 @@
 
 @section('scripts')
     <script>
-        // Data for the chart
         let chartData = [{{ $submitted }}, {{ $processed }}, {{ $done }}];
 
-        // ApexChart Options
         const getChartOptions = (seriesData) => {
             return {
                 series: seriesData,
@@ -168,15 +141,13 @@
             };
         };
 
-        // Render the chart
         const chart = new ApexCharts(document.getElementById("complaint-status-chart"), getChartOptions(chartData));
         chart.render();
 
-        // Checkbox filtering
         const checkboxes = document.querySelectorAll('#complainStatusFilter input[type="checkbox"]');
 
         function handleCheckboxChange() {
-            let updatedData = [0, 0, 0]; // Reset data
+            let updatedData = [0, 0, 0];
 
             checkboxes.forEach(checkbox => {
                 if (checkbox.checked) {
@@ -194,11 +165,9 @@
                 }
             });
 
-            // Update chart with filtered data
             chart.updateSeries(updatedData);
         }
 
-        // Add event listeners to checkboxes
         checkboxes.forEach(checkbox => {
             checkbox.addEventListener('change', handleCheckboxChange);
         });
@@ -272,6 +241,4 @@
             <span class="sr-only">Open actions menu</span>
         </button>
     </div>
-
-
 @endsection

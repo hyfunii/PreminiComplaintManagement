@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\File;
 use App\Models\Complaint;
 use App\Models\ComplaintStatus;
 use App\Models\ComplaintCategory;
 use Auth;
-
 class ComplaintController extends Controller
 {
+
+
     public function home()
     {
         return view('user.home');
@@ -42,7 +44,12 @@ class ComplaintController extends Controller
                 ->where('user_id', $user->id)
                 ->orderBy('created_at', 'desc')
                 ->get();
-            return view('user.our_complaint', compact('complaints', 'categories'));
+
+            $myComplaints = $complaints->where('status_id', 1); // Default
+            $processedComplaints = $complaints->where('status_id', 2); // Processed
+            $completedComplaints = $complaints->where('status_id', 3); // Complete
+
+            return view('user.our_complaint', compact('myComplaints', 'processedComplaints', 'completedComplaints', 'categories'));
         }
 
         return redirect()->route('login')->with('error', 'Unauthorized action. Please login with valid credentials.');
@@ -128,14 +135,35 @@ class ComplaintController extends Controller
         $request->validate([
             'title' => 'required|max:255',
             'description' => 'required',
-            'category_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:complaint_categories,id',
+            'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $complaint = Complaint::findOrFail($id);
 
+        // Update basic fields
         $complaint->title = $request->input('title');
         $complaint->description = $request->input('description');
         $complaint->category_id = $request->input('category_id');
+
+        // Update image if a new one is uploaded
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($complaint->file_path) {
+                Storage::disk('public')->delete($complaint->file_path);
+            }
+
+            // Store new image
+            $filePath = $request->file('image')->store('complaints', 'public');
+            $complaint->file_path = $filePath;
+
+            // Update files table
+            File::updateOrCreate(
+                ['complaint_id' => $complaint->id],
+                ['file_path' => $filePath, 'file_type' => $request->file('image')->getClientOriginalExtension()]
+            );
+        }
+
         $complaint->save();
 
         return redirect()->back()->with('success', 'Complaint updated successfully!');

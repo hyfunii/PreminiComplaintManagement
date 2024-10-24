@@ -16,15 +16,23 @@ class ResponseController extends Controller
             return redirect()->route('login')->with('warning', 'Please login to access this page.');
         }
 
-        $responses = Response::whereHas('complaint', function ($query) {
-            $query->where('status_id', '!=', 3);
-        })->with('admin', 'complaint')->get();
+        $user = Auth::user();
 
-        $doneResponses = Response::whereHas('complaint', function ($query) {
-            $query->where('status_id', 3);
-        })->with('admin', 'complaint')->get();
+        if ($user->role_id == '1') {
+            $responses = Response::whereHas('complaint', function ($query) {
+                $query->where('status_id', '!=', 3);
+            })->with('admin', 'complaint')->get();
 
-        return view('admin.response', compact('responses', 'doneResponses'));
+            $doneResponses = Response::whereHas('complaint', function ($query) {
+                $query->where('status_id', 3);
+            })->with('admin', 'complaint')->get();
+
+            return view('admin.response', compact('responses', 'doneResponses'));
+        } else if ($user->role_id == '2') {
+            return redirect()->route('complaints.dashboard')->with('error', 'You not admin!');
+        }
+
+        return redirect()->route('ea');
     }
 
     public function detail($id)
@@ -63,14 +71,28 @@ class ResponseController extends Controller
         return redirect()->route('complaints.index')->with('success', 'Respon berhasil disimpan dan status keluhan diperbarui.');
     }
 
+    // public function cancel($id)
+    // {
+    //     $response = Response::findOrFail($id);
+
+    //     $response->delete();
+
+    //     return redirect()->route('response.index')->with('success', 'Response has been successfully deleted.');
+    // }
     public function cancel($id)
     {
         $response = Response::findOrFail($id);
 
+        $complaint = $response->complaint;
+
         $response->delete();
 
-        return redirect()->route('response.index')->with('success', 'Response has been successfully deleted.');
+        $complaint->status_id = 1;
+        $complaint->save();
+
+        return redirect()->route('response.index')->with('success', 'Response has been successfully deleted, and the complaint status has been updated to Not Processed.');
     }
+
 
     public function done($id)
     {

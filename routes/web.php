@@ -19,25 +19,26 @@ use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\FileController;
 
 // Route::get('/', [ComplaintController::class, 'home']);
-Route::get('/', [ComplaintController::class, 'dashboard'])->name('complaints.dashboard');
-Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
-Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
-Route::get('/responses', [ResponseController::class, 'index'])->name('response.index');
-Route::get('/response/{id}/detail', [ResponseController::class, 'detail'])->name('response.detail');
-Route::get('/responses/create/{id}', [ResponseController::class, 'create'])->name('responses.create');
-Route::post('/responses/store', [ResponseController::class, 'store'])->name('responses.store');
-Route::get('/responses/create/{complaint_id}', [ResponseController::class, 'create'])->name('responses.create');
-Route::get('/my-complaints', [ResponseController::class, 'ourComplaints'])->name('our_complaints');
-Route::get('/my-complaints/{id}', [ResponseController::class, 'ourResponse'])->name('our_response');
-Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy'])->name('complaints.destroy');
-Route::get('response/search', [ResponseController::class, 'search'])->name('response.search');
-Route::get('/complaints/search', [ComplaintController::class, 'search'])->name('complaints.search');
-Route::get('/response/cancel/{id}', [ResponseController::class, 'cancel'])->name('response.cancel');
-Route::get('/response/done/{id}', [ResponseController::class, 'done'])->name('response.done');
-Route::put('/complaints/{id}', [ComplaintController::class, 'update'])->name('complaints.update');
-Route::get('/admin/files', [FileController::class, 'index'])->name('admin.files');
-Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('complaints.show');
-
+Route::middleware(['auth', 'role'])->group(function () {
+    Route::get('/', [ComplaintController::class, 'dashboard'])->name('complaints.dashboard');
+    Route::get('/complaints', [ComplaintController::class, 'index'])->name('complaints.index');
+    Route::get('/complaints/search', [ComplaintController::class, 'search'])->name('complaints.search');
+    Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('complaints.show');
+    Route::post('/complaints/store', [ComplaintController::class, 'store'])->name('complaints.store');
+    Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy'])->name('complaints.destroy');
+    Route::put('/complaints/{id}', [ComplaintController::class, 'update'])->name('complaints.update');
+    Route::get('/response/done/{id}', [ResponseController::class, 'done'])->name('response.done');
+    Route::get('/responses', [ResponseController::class, 'index'])->name('response.index');
+    Route::get('/response/{id}/detail', [ResponseController::class, 'detail'])->name('response.detail');
+    Route::get('/responses/create/{id}', [ResponseController::class, 'create'])->name('responses.create');
+    Route::post('/responses/store', [ResponseController::class, 'store'])->name('responses.store');
+    Route::get('/responses/create/{complaint_id}', [ResponseController::class, 'create'])->name('responses.create');
+    Route::get('/my-complaints', [ResponseController::class, 'ourComplaints'])->name('our_complaints');
+    Route::get('/my-complaints/{id}', [ResponseController::class, 'ourResponse'])->name('our_response');
+    Route::get('response/search', [ResponseController::class, 'search'])->name('response.search');
+    Route::get('/response/cancel/{id}', [ResponseController::class, 'cancel'])->name('response.cancel');
+    Route::get('/admin/files', [FileController::class, 'index'])->name('admin.files');
+});
 // Route::get('/', function () {
 //     return view('admin.complaints');
 // });
