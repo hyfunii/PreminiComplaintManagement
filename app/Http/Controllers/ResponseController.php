@@ -71,14 +71,6 @@ class ResponseController extends Controller
         return redirect()->route('complaints.index')->with('success', 'Respon berhasil disimpan dan status keluhan diperbarui.');
     }
 
-    // public function cancel($id)
-    // {
-    //     $response = Response::findOrFail($id);
-
-    //     $response->delete();
-
-    //     return redirect()->route('response.index')->with('success', 'Response has been successfully deleted.');
-    // }
     public function cancel($id)
     {
         $response = Response::findOrFail($id);
@@ -141,9 +133,24 @@ class ResponseController extends Controller
 
         $responses = Response::with('complaint.user')
             ->where('response_text', 'LIKE', "%{$query}%")
+            ->orWhereHas('complaint', function ($q) use ($query) {
+                $q->where('title', 'LIKE', "%{$query}%")
+                    ->orWhereHas('user', function ($q) use ($query) {
+                        $q->where('name', 'LIKE', "%{$query}%");
+                    });
+            })
+            ->whereHas('complaint', function ($q) {
+                $q->where('status_id', 2);
+            })
             ->get();
 
-        return view('admin.response', compact('responses'));
+        $doneResponses = Response::with('complaint.user')
+            ->whereHas('complaint', function ($q) {
+                $q->where('status_id', 3);
+            })
+            ->get();
+
+        return view('admin.response', compact('responses', 'doneResponses'));
     }
 
 }

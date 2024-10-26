@@ -15,8 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 use App\Http\Controllers\ComplaintController;
+use App\Http\Controllers\ComplaintCategoryController;
 use App\Http\Controllers\ResponseController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 
 // Route::get('/', [ComplaintController::class, 'home']);
 Route::middleware(['auth', 'role'])->group(function () {
@@ -38,6 +41,9 @@ Route::middleware(['auth', 'role'])->group(function () {
     Route::get('response/search', [ResponseController::class, 'search'])->name('response.search');
     Route::get('/response/cancel/{id}', [ResponseController::class, 'cancel'])->name('response.cancel');
     Route::get('/admin/files', [FileController::class, 'index'])->name('admin.files');
+    Route::resource('users', UserController::class);
+    Route::resource('categories', ComplaintCategoryController::class);
+    Route::resource('roles', RoleController::class);
 });
 // Route::get('/', function () {
 //     return view('admin.complaints');

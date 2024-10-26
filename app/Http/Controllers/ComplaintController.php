@@ -45,9 +45,9 @@ class ComplaintController extends Controller
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            $myComplaints = $complaints->where('status_id', 1); // Default
-            $processedComplaints = $complaints->where('status_id', 2); // Processed
-            $completedComplaints = $complaints->where('status_id', 3); // Complete
+            $myComplaints = $complaints->where('status_id', 1);
+            $processedComplaints = $complaints->where('status_id', 2);
+            $completedComplaints = $complaints->where('status_id', 3);
 
             return view('user.our_complaint', compact('myComplaints', 'processedComplaints', 'completedComplaints', 'categories'));
         }
@@ -141,23 +141,18 @@ class ComplaintController extends Controller
 
         $complaint = Complaint::findOrFail($id);
 
-        // Update basic fields
         $complaint->title = $request->input('title');
         $complaint->description = $request->input('description');
         $complaint->category_id = $request->input('category_id');
 
-        // Update image if a new one is uploaded
         if ($request->hasFile('image')) {
-            // Delete old image if exists
             if ($complaint->file_path) {
                 Storage::disk('public')->delete($complaint->file_path);
             }
 
-            // Store new image
             $filePath = $request->file('image')->store('complaints', 'public');
             $complaint->file_path = $filePath;
 
-            // Update files table
             File::updateOrCreate(
                 ['complaint_id' => $complaint->id],
                 ['file_path' => $filePath, 'file_type' => $request->file('image')->getClientOriginalExtension()]
@@ -178,6 +173,7 @@ class ComplaintController extends Controller
 
         return redirect()->route('complaints.dashboard')->with('success', 'Your complaint has been successfully canceled.');
     }
+
     public function search(Request $request)
     {
         $request->validate([
@@ -187,9 +183,13 @@ class ComplaintController extends Controller
         $query = $request->input('query');
 
         $complaints = Complaint::with('user', 'category', 'status')
-            ->whereDoesntHave('responses')
-            ->where('title', 'LIKE', "%{$query}%")
-            ->orWhere('description', 'LIKE', "%{$query}%")
+            ->where('status_id', 1)
+            ->where(function ($q) use ($query) {
+                $q->whereHas('user', function ($q) use ($query) {
+                    $q->where('name', 'LIKE', "%{$query}%");
+                })
+                    ->orWhere('title', 'LIKE', "%{$query}%");
+            })
             ->get();
 
         return view('admin.complaints', compact('complaints'));

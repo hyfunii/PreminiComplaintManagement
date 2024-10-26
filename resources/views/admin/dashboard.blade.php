@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-semibold mb-4">Dashboard Keluhan</h1>
+        <h1 class="text-3xl font-semibold mb-4">Complaint dashboard</h1>
 
         <div class="flex justify-between">
             <div class="flex-1 max-w-md bg-white rounded-lg shadow dark:bg-gray-800 p-6 me-4">
@@ -11,7 +11,7 @@
                 <div id="complaint-status-chart" class="py-6"></div>
             </div>
 
-            <div class="flex-1 max-w-md bg-white rounded-lg shadow dark:bg-gray-800 p-6">
+            {{-- <div class="flex-1 max-w-md bg-white rounded-lg shadow dark:bg-gray-800 p-6">
                 <ul class="flex flex-wrap text-xs font-medium text-center text-gray-500 border-b border-gray-200 rounded-t-lg bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:bg-gray-800"
                     id="defaultTab" data-tabs-toggle="#defaultTabContent" role="tablist">
                     <li class="me-1">
@@ -100,82 +100,11 @@
                         </ul>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
-@endsection
 
-@section('scripts')
-    <script>
-        let chartData = [{{ $submitted }}, {{ $processed }}, {{ $done }}];
-
-        const getChartOptions = (seriesData) => {
-            return {
-                series: seriesData,
-                chart: {
-                    height: 320,
-                    type: 'donut',
-                },
-                labels: ["Submitted", "Processed", "Done"],
-                colors: ["#1C64F2", "#16BDCA", "#FDBA8C"],
-                plotOptions: {
-                    pie: {
-                        donut: {
-                            size: '80%',
-                            labels: {
-                                show: true,
-                                total: {
-                                    show: true,
-                                    label: "Total Complaints",
-                                    formatter: function(w) {
-                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0) + " Complaints";
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                legend: {
-                    position: 'bottom',
-                }
-            };
-        };
-
-        const chart = new ApexCharts(document.getElementById("complaint-status-chart"), getChartOptions(chartData));
-        chart.render();
-
-        const checkboxes = document.querySelectorAll('#complainStatusFilter input[type="checkbox"]');
-
-        function handleCheckboxChange() {
-            let updatedData = [0, 0, 0];
-
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    switch (checkbox.value) {
-                        case '1':
-                            updatedData[0] = {{ $submitted }};
-                            break;
-                        case '2':
-                            updatedData[1] = {{ $processed }};
-                            break;
-                        case '3':
-                            updatedData[2] = {{ $done }};
-                            break;
-                    }
-                }
-            });
-
-            chart.updateSeries(updatedData);
-        }
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', handleCheckboxChange);
-        });
-    </script>
-
-
-
-    <div data-dial-init class="fixed right-6 bottom-6 group">
+    {{-- <div data-dial-init class="fixed right-6 bottom-6 group">
         <div id="speed-dial-menu-dropdown-square"
             class="flex flex-col justify-end hidden py-1 mb-4 space-y-2 bg-white border border-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
             <ul class="text-sm text-gray-500 dark:text-gray-300">
@@ -240,5 +169,74 @@
             </svg>
             <span class="sr-only">Open actions menu</span>
         </button>
-    </div>
+    </div> --}}
+@endsection
+
+@section('scripts')
+    <script>
+        let chartData = [{{ $submitted }}, {{ $processed }}, {{ $done }}];
+
+        const getChartOptions = (seriesData) => {
+            return {
+                series: seriesData,
+                chart: {
+                    height: 320,
+                    type: 'donut',
+                },
+                labels: ["Submitted", "Processed", "Complete"],
+                colors: ["#1C64F2", "#16BDCA", "#FDBA8C"],
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '75%',
+                            labels: {
+                                show: true,
+                                total: {
+                                    show: true,
+                                    label: "Total Complaints",
+                                    formatter: function(w) {
+                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0) + " Complaints";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom',
+                }
+            };
+        };
+
+        const chart = new ApexCharts(document.getElementById("complaint-status-chart"), getChartOptions(chartData));
+        chart.render();
+
+        const checkboxes = document.querySelectorAll('#complainStatusFilter input[type="checkbox"]');
+
+        function handleCheckboxChange() {
+            let updatedData = [0, 0, 0];
+
+            checkboxes.forEach(checkbox => {
+                if (checkbox.checked) {
+                    switch (checkbox.value) {
+                        case '1':
+                            updatedData[0] = {{ $submitted }};
+                            break;
+                        case '2':
+                            updatedData[1] = {{ $processed }};
+                            break;
+                        case '3':
+                            updatedData[2] = {{ $done }};
+                            break;
+                    }
+                }
+            });
+
+            chart.updateSeries(updatedData);
+        }
+
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', handleCheckboxChange);
+        });
+    </script>
 @endsection

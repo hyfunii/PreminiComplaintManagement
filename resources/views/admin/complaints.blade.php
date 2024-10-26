@@ -4,7 +4,7 @@
     <div class="container mx-auto py-8">
         <h2 class="text-2xl font-bold mb-6">Complaints Data</h2>
 
-        <form action="{{ route('complaints.search') }}" method="GET" class="max-w-md mx-auto mb-4 ml-0">
+        <form id="searchForm" action="{{ route('complaints.search') }}" method="GET" class="max-w-md mx-auto mb-4 ml-0">
             <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -16,9 +16,8 @@
                 </div>
                 <input type="search" name="query" id="default-search"
                     class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search Complaints..." required />
-                <button type="submit"
-                    class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+                    placeholder="Search Complaints..." value="{{ request()->get('query', '') }}" />
+                <button type="submit" class="hidden">Search</button>
             </div>
         </form>
 
@@ -66,12 +65,14 @@
                                     <span class="text-gray-500">No Doc</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4">
-                                <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded mr-2">Response</a>
+                            <td class="px-6 py-4 text-gray-700">
+                                <div class="flex flex-wrap gap-2">
+                                    <a href="{{ route('responses.create', ['complaint_id' => $complaint->id]) }}"
+                                        class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded mr-2">Response</a>
 
-                                <a href="{{ route('complaints.show', $complaint->id) }}"
-                                    class="bg-green-500 hover:bg-green-700 text-white font-semibold py-1 px-4 rounded">Details</a>
+                                    <a href="{{ route('complaints.show', $complaint->id) }}"
+                                        class="bg-green-500 hover:bg-green-700 text-white font-semibold py-1 px-4 rounded">Details</a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
@@ -88,17 +89,20 @@
         </div>
     </div>
 
-    <script>
-        function showImage(imagePath) {
-            var modal = document.getElementById('imageModal');
-            var image = document.getElementById('complaintImage');
-            image.src = imagePath;
-            modal.classList.remove('hidden');
-        }
+@section('scripts')
+@endsection
 
-        function closeImage() {
-            var modal = document.getElementById('imageModal');
-            modal.classList.add('hidden');
-        }
-    </script>
+<script>
+    function showImage(imagePath) {
+        var modal = document.getElementById('imageModal');
+        var image = document.getElementById('complaintImage');
+        image.src = imagePath;
+        modal.classList.remove('hidden');
+    }
+
+    function closeImage() {
+        var modal = document.getElementById('imageModal');
+        modal.classList.add('hidden');
+    }
+</script>
 @endsection
