@@ -32,9 +32,10 @@
                                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="search" name="query" id="default-search"
+                        <input
                             class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Search responses..." required />
+                            type="search" name="query" id="response-search" placeholder="Search responses..."
+                            oninput="searchResponses()" />
                     </div>
                 </form>
 
@@ -90,9 +91,10 @@
                                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        <input type="search" name="query" id="default-search"
+                        <input
                             class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Search responses..." required />
+                            type="search" name="query" id="done-response-search" placeholder="Search done responses..."
+                            oninput="searchDoneResponses()" />
                     </div>
                 </form>
                 <table class="min-w-full bg-white border border-gray-200 shadow-md w-full max-w-[1000px]">
@@ -140,5 +142,44 @@
                 document.getElementById(target).classList.remove('hidden');
             });
         });
+    </script>
+    <script>
+        function searchResponses() {
+            const query = document.getElementById('response-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#response-list tbody tr');
+
+            rows.forEach(row => {
+                const user = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const complaint = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const respondedBy = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const response = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+                if (user.includes(query) || complaint.includes(query) || respondedBy.includes(query) || response
+                    .includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function searchDoneResponses() {
+            const query = document.getElementById('done-response-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#done-complaints tbody tr');
+
+            rows.forEach(row => {
+                const user = row.querySelector('td:nth-child(1)').textContent.toLowerCase();
+                const complaint = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+                const respondedBy = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+                const response = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+
+                if (user.includes(query) || complaint.includes(query) || respondedBy.includes(query) || response
+                    .includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
     </script>
 @endsection

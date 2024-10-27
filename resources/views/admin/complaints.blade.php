@@ -14,9 +14,10 @@
                             d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                     </svg>
                 </div>
-                <input type="search" name="query" id="default-search"
+                <input type="search" name="query" id="search"
                     class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Search Complaints..." value="{{ request()->get('query', '') }}" />
+                    placeholder="Search Complaints..." value="{{ request()->get('query', '') }}"
+                    oninput="searchComplaints()" />
                 <button type="submit" class="hidden">Search</button>
             </div>
         </form>
@@ -103,6 +104,24 @@
     function closeImage() {
         var modal = document.getElementById('imageModal');
         modal.classList.add('hidden');
+    }
+
+    function searchComplaints() {
+        const query = document.getElementById('search').value.toLowerCase();
+        const rows = document.querySelectorAll('table tbody tr');
+
+        rows.forEach(row => {
+            const username = row.querySelector('th').textContent.toLowerCase();
+            const title = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
+            const category = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+
+            // Show row if the query matches username, title, or category
+            if (username.includes(query) || title.includes(query) || category.includes(query)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     }
 </script>
 @endsection

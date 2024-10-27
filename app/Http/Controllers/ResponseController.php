@@ -145,8 +145,14 @@ class ResponseController extends Controller
             ->get();
 
         $doneResponses = Response::with('complaint.user')
-            ->whereHas('complaint', function ($q) {
-                $q->where('status_id', 3);
+            ->whereHas('complaint', function ($q) use ($query) {
+                $q->where('status_id', 3)
+                    ->where(function ($q) use ($query) {
+                        $q->where('title', 'LIKE', "%{$query}%")
+                            ->orWhereHas('user', function ($q) use ($query) {
+                                $q->where('name', 'LIKE', "%{$query}%");
+                            });
+                    });
             })
             ->get();
 
