@@ -10,7 +10,7 @@ class FileController extends Controller
 {
     public function index()
     {
-        $files = File::with('complaint')->get();
+        $files = File::with('complaint')->get()->sortByDesc('created_at');
 
         $user = Auth::user();
         if ($user->role_id == 1) {

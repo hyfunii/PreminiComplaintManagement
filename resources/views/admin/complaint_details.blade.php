@@ -34,10 +34,6 @@
             </div>
 
             @if ($complaint->file_path && file_exists(public_path('storage/' . $complaint->file_path)))
-                {{-- <div class="relative max-w-3xl w-1/2 p-4 bg-white rounded-lg shadow-lg mb-4">
-                    <p><strong>Attached File:</strong></p>
-                    <img src="{{ asset('storage/' . $complaint->file_path) }}" alt="Complaint File" class="w-full h-auto object-contain">
-                </div> --}}
                 <div class="relative max-w-3xl w-1/2 p-4 bg-white rounded-lg shadow-lg mb-4">
                     <p><strong>Attached File:</strong></p>
                     <div class="flex items-center">
