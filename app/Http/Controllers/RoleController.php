@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use Auth;
 use Illuminate\Http\Request;
 
 class RoleController extends Controller
@@ -10,7 +11,12 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view('admin.other.role', compact('roles'));
+        $user = Auth::user();
+        if ($user->role_id == 1) {
+            return view('admin.other.role', compact('roles'));
+        } else {
+            return redirect()->back()->with('error', 'You not admin!');
+        }
     }
 
     public function store(Request $request)

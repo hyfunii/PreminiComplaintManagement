@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Auth;
 
 class UserController extends Controller
 {
@@ -13,7 +14,12 @@ class UserController extends Controller
     {
         $users = User::with('role')->get(); // Fetch users with their roles
         $roles = Role::all(); // Fetch all roles
-        return view('admin.other.user', compact('users', 'roles'));
+        $user = Auth::user();
+        if ($user->role_id == 1) {
+            return view('admin.other.user', compact('users', 'roles'));
+        } else {
+            return redirect()->back()->with('error', 'You not admin!');
+        }
     }
 
     public function store(Request $request)

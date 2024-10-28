@@ -4,13 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\ComplaintCategory;
 use Illuminate\Http\Request;
+use Auth;
 
 class ComplaintCategoryController extends Controller
 {
     public function index()
     {
         $categories = ComplaintCategory::all();
-        return view('admin.other.category', compact('categories'));
+        $user = Auth::user();
+        if ($user->role_id == 1) {
+            return view('admin.other.category', compact('categories'));
+        } else {
+            return redirect()->back()->with('error', 'You not admin!');
+        }
     }
 
     public function store(Request $request)
