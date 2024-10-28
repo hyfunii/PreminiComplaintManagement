@@ -102,11 +102,11 @@ class ComplaintController extends Controller
         ]);
 
         $existingComplaint = Complaint::where('user_id', Auth::id())
-            ->where('title', $request->title)
+            ->where('description', $request->description)
             ->first();
 
         if ($existingComplaint) {
-            return redirect()->back()->withErrors(['title' => 'You already have a complaint with this title. Please choose a different title.']);
+            return redirect()->back()->withErrors(['description' => 'This complaint has been made!'])->withInput();
         }
 
         $filePath = null;
@@ -151,6 +151,14 @@ class ComplaintController extends Controller
             'category_id' => 'required|exists:complaint_categories,id',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $existingComplaint = Complaint::where('user_id', Auth::id())
+            ->where('description', $request->description)
+            ->first();
+
+        if ($existingComplaint) {
+            return redirect()->back()->withErrors(['title' => 'You already have a complaint with this title. Please choose a different title.']);
+        }
 
         $complaint = Complaint::findOrFail($id);
 
