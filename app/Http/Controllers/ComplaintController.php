@@ -36,7 +36,12 @@ class ComplaintController extends Controller
             $processed = $complaintsByStatus[2] ?? 0;
             $done = $complaintsByStatus[3] ?? 0;
 
-            return view('admin.dashboard', compact('submitted', 'processed', 'done'));
+            $latestcomplaints = Complaint::with('user', 'category', 'status')
+                ->whereDoesntHave('responses')
+                ->latest()
+                ->first();
+
+            return view('admin.dashboard', compact('submitted', 'processed', 'done', 'latestcomplaints'));
 
         } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
