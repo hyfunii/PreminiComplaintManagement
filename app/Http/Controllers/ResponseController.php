@@ -57,6 +57,12 @@ class ResponseController extends Controller
             'admin_id' => 'required|exists:users,id',
         ]);
 
+        $exitstresponse = Response::where('complaint_id' , $request->complaint_id)->first();
+
+        if ($exitstresponse) {
+            return redirect()->route('response.index')->with('error', 'this complaint has responded!.');
+        }
+
         $response = new Response();
         $response->complaint_id = $request->complaint_id;
         $response->admin_id = $request->admin_id;

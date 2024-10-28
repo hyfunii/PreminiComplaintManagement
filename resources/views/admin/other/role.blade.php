@@ -4,18 +4,12 @@
     <div class="container mx-auto py-8">
         <h1 class="text-2xl font-bold mb-6">Roles Management</h1>
 
-        <button onclick="openModal('createRoleModal')"
-            class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded mb-4">
-            Add Role
-        </button>
-
         <div class="relative overflow-y-auto max-h-screen shadow-md sm:rounded-lg">
             <table class="w-full bg-white border border-gray-200 shadow-md">
                 <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
                         <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Description</th>
-                        <th scope="col" class="px-6 py-3 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,16 +20,6 @@
                             </td>
                             <td class="px-6 py-4 text-gray-700">
                                 {{ $role->description ?? 'N/A' }}
-                            </td>
-                            <td class="px-6 py-4">
-                                <button onclick="openModal('editRoleModal', {{ $role }})"
-                                    class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-4 rounded mr-2">Edit</button>
-                                <form action="{{ route('roles.destroy', $role) }}" method="POST" class="inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Are you sure?')"
-                                        class="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded">Delete</button>
-                                </form>
                             </td>
                         </tr>
                     @endforeach

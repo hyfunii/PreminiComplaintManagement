@@ -79,7 +79,7 @@
                                             <a href="{{ route('logout') }}"
                                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 role="menuitem"
-                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Sign
+                                                onclick="event.preventDefault(); document.getElementById('logout-form').submit(); return confirm('Are you sure you want to Log Out from this account?')">Sign
                                                 out</a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                                 class="hidden">

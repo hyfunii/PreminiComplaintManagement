@@ -37,15 +37,15 @@
                             class="block w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-md" rows="4" readonly>{{ $complaint->description }}</textarea>
                     </div>
 
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium text-gray-700">Attached Document:</label>
-                        @if ($complaint->file_path)
+                    @if ($complaint->file_path)
+                        <p><strong>Attached File:</strong></p>
+                        <div class="flex items-center max-w-3xl w-1/2 p-4 mb-4">
                             <img src="{{ asset('storage/' . $complaint->file_path) }}" alt="Attached Document"
-                                class="mt-2 w-full h-auto rounded-md" />
-                        @else
-                            <p class="mt-2 text-gray-600">No document</p>
-                        @endif
-                    </div>
+                                class="w-full h-auto object-contain" />
+                        </div>
+                    @else
+                        <p class="mt-2 text-gray-600">No document</p>
+                    @endif
 
                     <div class="mb-4">
                         <label for="response_text" class="block text-sm font-medium text-gray-700">Response:</label>

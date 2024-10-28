@@ -37,7 +37,6 @@ class ComplaintController extends Controller
             $done = $complaintsByStatus[3] ?? 0;
 
             $latestcomplaints = Complaint::with('user', 'category', 'status')
-                ->whereDoesntHave('responses')
                 ->latest()
                 ->first();
 
@@ -101,6 +100,14 @@ class ComplaintController extends Controller
             'description' => 'required|string',
             'file_path' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
+
+        $existingComplaint = Complaint::where('user_id', Auth::id())
+            ->where('title', $request->title)
+            ->first();
+
+        if ($existingComplaint) {
+            return redirect()->back()->withErrors(['title' => 'You already have a complaint with this title. Please choose a different title.']);
+        }
 
         $filePath = null;
         if ($request->hasFile('file_path')) {

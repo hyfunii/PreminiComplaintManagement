@@ -53,9 +53,15 @@ class ComplaintCategoryController extends Controller
 
     public function destroy(ComplaintCategory $category)
     {
-        $category->delete();
+        try {
+            $category = ComplaintCategory::findOrFail($category->id);
+            $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
+            return redirect()->route('categories.index')->with('success', 'Category deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('categories.index')->with('error', 'Cant delete this data because a lot of data is using it!!');
+
+        }
     }
 }
 

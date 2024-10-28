@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('complaints', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relasi ke tabel users
-            $table->foreignId('category_id')->constrained('complaint_categories')->onDelete('cascade'); // Relasi ke tabel complaint_categories
-            $table->foreignId('status_id')->constrained('complaint_statuses'); // Relasi ke tabel complaint_statuses
+            $table->foreignId('category_id')->constrained('complaint_categories')->onDelete('restrict'); // Relasi ke tabel complaint_categories
+            $table->foreignId('status_id')->constrained('complaint_statuses')->onDelete('restrict'); // Relasi ke tabel complaint_statuses
             $table->string('title');
             $table->text('description');
             $table->string('file_path')->nullable(); // Path untuk file bukti pengaduan
