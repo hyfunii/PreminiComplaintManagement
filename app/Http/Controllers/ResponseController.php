@@ -21,11 +21,11 @@ class ResponseController extends Controller
         if ($user->role_id == '1') {
             $responses = Response::whereHas('complaint', function ($query) {
                 $query->where('status_id', '!=', 3);
-            })->with('admin', 'complaint')->get();
+            })->with('admin', 'complaint')->get()->sortByDesc('created_at');
 
             $doneResponses = Response::whereHas('complaint', function ($query) {
                 $query->where('status_id', 3);
-            })->with('admin', 'complaint')->get();
+            })->with('admin', 'complaint')->get()->sortByDesc('created_at');
 
             return view('admin.response', compact('responses', 'doneResponses'));
         } else if ($user->role_id == '2') {

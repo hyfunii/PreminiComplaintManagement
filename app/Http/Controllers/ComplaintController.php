@@ -71,7 +71,8 @@ class ComplaintController extends Controller
         if ($user->role_id == 1) {
             $complaints = Complaint::with('user', 'category', 'status')
                 ->whereDoesntHave('responses')
-                ->get();
+                ->get()
+                ->sortByDesc('created_at');
             return view('admin.complaints', compact('complaints'));
         } elseif ($user->role_id == 2) {
             $categories = ComplaintCategory::all();
