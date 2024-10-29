@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -202,7 +203,7 @@
     <div class="p-4 @if (Auth::check() && Auth::user()->role->name == 'admin') sm:ml-64 @endif">
         <div class="p-4 rounded-lg dark:border-gray-700 mt-14">
             @if (session('success'))
-                <div id="toast-bottom-left"
+                {{-- <div id="toast-bottom-left"
                     class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 z-50"
                     role="alert">
                     <div
@@ -215,9 +216,18 @@
                         <span class="sr-only">Check icon</span>
                     </div>
                     <div class="text-sm font-normal">{{ session('success') }}</div>
-                </div>
+                </div> --}}
+                <script>
+                    Swal.fire({
+                        title: "Berhasil",
+                        text: "{{ session('success') }}",
+                        icon: "success",
+                        confirmButtonColor: "#3085d6",
+
+                    });
+                </script>
             @elseif (session('error'))
-                <div id="toast-bottom-left"
+                {{-- <div id="toast-bottom-left"
                     class="fixed flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow bottom-5 left-5 dark:text-gray-400 dark:divide-gray-700 dark:bg-gray-800 z-50"
                     role="alert">
                     <div
@@ -230,7 +240,16 @@
                         <span class="sr-only">Check icon</span>
                     </div>
                     <div class="text-sm font-normal">{{ session('error') }}</div>
-                </div>
+                </div> --}}
+                <script>
+                    Swal.fire({
+                        title: "Ada masalah?",
+                        text: "{{ session('error') }}",
+                        icon: "error",
+                        confirmButtonColor: "#3085d6",
+
+                    });
+                </script>
             @endif
             @yield('content')
         </div>
