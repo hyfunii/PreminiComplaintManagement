@@ -30,10 +30,11 @@
                             <td class="px-6 py-4">
                                 <button onclick="openModal('editCategoryModal', {{ $category }})"
                                     class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-4 rounded mr-2">Edit</button>
-                                <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline">
+                                <form action="{{ route('categories.destroy', $category) }}" method="POST" class="inline"
+                                    id="delete-form-{{ $category->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" onclick="return confirm('Are you sure?')"
+                                    <button type="button" onclick="confirmDelete('delete-form-{{ $category->id }}')"
                                         class="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded">Delete</button>
                                 </form>
                             </td>

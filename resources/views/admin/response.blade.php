@@ -64,12 +64,16 @@
                                     <div class="flex flex-wrap gap-2">
                                         <a href="{{ route('response.detail', $response->id) }}"
                                             class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-1 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105">Details</a>
-                                        <a href="{{ route('response.cancel', $response->id) }}"
+                                        <a href="#"
                                             class="bg-red-500 hover:bg-red-700 text-white font-semibold py-1 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105"
-                                            onclick="return confirm('Are you sure you want to cancel this response?')">Cancel</a>
-                                        <a href="{{ route('response.done', $response->id) }}"
+                                            onclick="showSweetAlert('Are you sure?', 'do you want to cancel this response?', function() {
+                                                window.location.href = '{{ route('response.cancel', $response->id) }}';
+                                            }); return false;">Cancel</a>
+                                        <a href="#"
                                             class="bg-green-500 hover:bg-green-700 text-white font-semibold py-1 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105"
-                                            onclick="return confirm('Are you sure you want to mark this response as complete?')">Complete</a>
+                                            onclick="showSweetAlert('Are you sure?','Do you want to resolve this complaint?', function() { 
+                                                window.location.href = '{{ route('response.done', $response->id) }}';
+                                            }); return false;">Complete</a>
                                     </div>
                                 </td>
                             </tr>

@@ -74,7 +74,7 @@ class ResponseController extends Controller
         $complaint->status_id = 2;
         $complaint->save();
 
-        return redirect()->route('complaints.index')->with('success', 'Respon berhasil disimpan dan status keluhan diperbarui.');
+        return redirect()->route('complaints.index')->with('success', 'response was successful');
     }
 
     public function cancel($id)
@@ -88,7 +88,7 @@ class ResponseController extends Controller
         $complaint->status_id = 1;
         $complaint->save();
 
-        return redirect()->route('response.index')->with('success', 'Response has been successfully deleted, and the complaint status has been updated to Not Processed.');
+        return redirect()->route('response.index')->with('success', 'response cancelled.');
     }
 
 

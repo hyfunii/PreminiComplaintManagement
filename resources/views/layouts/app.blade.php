@@ -77,11 +77,25 @@
                                             @endif
                                         </li>
                                         <li>
-                                            <a href="{{ route('logout') }}"
+                                            <a href="#"
                                                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                                 role="menuitem"
-                                                onclick="event.preventDefault(); if (confirm('Are you sure you want to log out from this account?')) { document.getElementById('logout-form').submit(); }">Sign
-                                                out</a>
+                                                onclick="event.preventDefault(); 
+                                                    Swal.fire({
+                                                      title: 'Are you sure?',
+                                                      text: 'You will be logged out of this account!',
+                                                      icon: 'warning',
+                                                      showCancelButton: true,
+                                                      confirmButtonColor: '#3085d6',
+                                                      cancelButtonColor: '#d33',
+                                                      confirmButtonText: 'Yes, log out!'
+                                                    }).then((result) => {
+                                                      if (result.isConfirmed) {
+                                                        document.getElementById('logout-form').submit();
+                                                      }
+                                                    });">
+                                                Sign out
+                                            </a>
                                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
                                                 class="hidden">
                                                 @csrf
@@ -219,7 +233,7 @@
                 </div> --}}
                 <script>
                     Swal.fire({
-                        title: "Berhasil",
+                        title: "Succsess",
                         text: "{{ session('success') }}",
                         icon: "success",
                         confirmButtonColor: "#3085d6",
@@ -243,7 +257,7 @@
                 </div> --}}
                 <script>
                     Swal.fire({
-                        title: "Ada masalah?",
+                        title: "There is a problem?",
                         text: "{{ session('error') }}",
                         icon: "error",
                         confirmButtonColor: "#3085d6",
@@ -293,7 +307,41 @@
             }
         });
     </script>
-    {{-- search --}}
+    {{-- alert (sweet alert) --}}
+    <script>
+        function showSweetAlert(title, text, confirmCallback) {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, proceed!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    confirmCallback();
+                }
+            });
+        }
+    </script>
+    <script>
+        function confirmDelete(formId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
+        }
+    </script>
     @yield('scripts')
 </body>
 
