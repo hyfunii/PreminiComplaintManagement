@@ -5,17 +5,24 @@
         <div class="flex justify-between items-center mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-styled-tab" role="tablist">
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg text-purple-600 border-purple-600" id="my-complaints-tab" type="button" role="tab" aria-controls="my-complaints" aria-selected="true">My Complaints</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg text-purple-600 border-purple-600"
+                        id="my-complaints-tab" type="button" role="tab" aria-controls="my-complaints"
+                        aria-selected="true">My Complaints</button>
                 </li>
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 hover:text-gray-600" id="processed-complaints-tab" type="button" role="tab" aria-controls="processed-complaints" aria-selected="false">Processed</button>
+                    <button class="inline-block p-4 border-b-2 hover:text-gray-600" id="processed-complaints-tab"
+                        type="button" role="tab" aria-controls="processed-complaints"
+                        aria-selected="false">Processed</button>
                 </li>
                 <li role="presentation">
-                    <button class="inline-block p-4 border-b-2 hover:text-gray-600" id="completed-complaints-tab" type="button" role="tab" aria-controls="completed-complaints" aria-selected="false">Completed</button>
+                    <button class="inline-block p-4 border-b-2 hover:text-gray-600" id="completed-complaints-tab"
+                        type="button" role="tab" aria-controls="completed-complaints"
+                        aria-selected="false">Completed</button>
                 </li>
             </ul>
             <div class="mt-6 flex justify-end">
-                <a href="{{ route('complaints.index') }}" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105 m-2">
+                <a href="{{ route('complaints.index') }}"
+                    class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded transition duration-200 ease-in-out transform hover:scale-105 m-2">
                     Create Complaint
                 </a>
             </div>
@@ -44,12 +51,12 @@
                                     class="mt-2 bg-yellow-400 hover:bg-yellow-700 text-white py-2 px-4 rounded">Edit</button>
 
                                 <form action="{{ route('complaints.destroy', $complaint->id) }}" method="POST"
-                                    class="inline-block">
+                                    class="inline-block" id="delete-form-{{ $complaint->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
+                                    <button type="button"
                                         class="mt-2 bg-red-500 hover:bg-red-700 text-white py-2 px-4 rounded"
-                                        onclick="return confirm('Are you sure you want to cancel this complaint?')">Cancel
+                                        onclick="confirmDelete('delete-form-{{ $complaint->id }}')">Cancel
                                         Complaint</button>
                                 </form>
                             </li>
@@ -90,18 +97,21 @@
                                             </select>
                                         </div>
                                         <div class="mb-4">
-                                            <label for="image{{ $complaint->id }}" class="block text-sm font-medium text-gray-700">Image</label>
+                                            <label for="image{{ $complaint->id }}"
+                                                class="block text-sm font-medium text-gray-700">Image</label>
                                             <div class="mb-2">
                                                 @if ($complaint->file_path)
-                                                    <img src="{{ asset('storage/' . $complaint->file_path) }}" alt="Current Image" class="w-full h-auto mb-2">
+                                                    <img src="{{ asset('storage/' . $complaint->file_path) }}"
+                                                        alt="Current Image" class="w-full h-auto mb-2">
                                                 @else
                                                     <p class="text-gray-500">No image available</p>
                                                 @endif
                                             </div>
-                                            <input type="file" name="image" id="image{{ $complaint->id }}" class="w-full p-2 border border-gray-300 rounded">
+                                            <input type="file" name="image" id="image{{ $complaint->id }}"
+                                                class="w-full p-2 border border-gray-300 rounded">
                                             <small class="text-gray-500">Leave empty to keep the current image.</small>
                                         </div>
-                                        
+
                                         <div class="flex justify-end">
                                             <button type="button" onclick="closeModal('{{ $complaint->id }}')"
                                                 class="bg-gray-300 hover:bg-gray-500 text-gray-800 py-2 px-4 rounded">Close</button>

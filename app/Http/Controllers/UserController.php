@@ -40,8 +40,20 @@ class UserController extends Controller
             ]);
 
             return redirect()->route('users.index')->with('success', 'User created successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            $errors = $e->validator->errors();
+
+            if ($errors->has('email')) {
+                return redirect()->route('users.index')->with('error', 'This email is already used!');
+            }
+
+            if ($errors->has('password')) {
+                return redirect()->route('users.index')->with('error', 'Password must be at least 8 characters long!');
+            }
+
+            return redirect()->route('users.index')->with('error', 'Validation failed!');
         } catch (\Exception $e) {
-            return redirect()->route('users.index')->with('error', 'This email already used!');
+            return redirect()->route('users.index')->with('error', 'An unexpected error occurred!');
         }
     }
 

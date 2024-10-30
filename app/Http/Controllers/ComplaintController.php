@@ -102,7 +102,7 @@ class ComplaintController extends Controller
         ]);
 
         $existingComplaint = Complaint::where('user_id', Auth::id())
-            ->where('description', $request->description)
+            ->where('title', $request->title)
             ->first();
 
         if ($existingComplaint) {
@@ -152,15 +152,16 @@ class ComplaintController extends Controller
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
         ]);
 
+        $complaint = Complaint::findOrFail($id);
+
         $existingComplaint = Complaint::where('user_id', Auth::id())
-            ->where('description', $request->description)
+            ->where('title', $request->title)
+            ->where('id', '!=', $id)
             ->first();
 
         if ($existingComplaint) {
-            return redirect()->back()->withErrors(['title' => 'You already have a complaint with this title. Please choose a different title.']);
+            return redirect()->back()->with('error', 'You already have a complaint with this title. Please choose a different title.');
         }
-
-        $complaint = Complaint::findOrFail($id);
 
         $complaint->title = $request->input('title');
         $complaint->description = $request->input('description');
