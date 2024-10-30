@@ -39,7 +39,7 @@ class ComplaintCategoryController extends Controller
     {
         try {
             $request->validate([
-                'name' => 'required|string|max:255|unique:complaint_categories,name',
+                'name' => 'required|string|max:255|unique:complaint_categories,name,' . $category->id,
                 'description' => 'nullable|string|max:255',
             ]);
 
